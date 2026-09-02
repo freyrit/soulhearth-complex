@@ -83,7 +83,7 @@ kbd{border:1px solid #454a65;background:#1a1d2d;border-radius:4px;padding:1px 5p
       <div class="status">X &nbsp;&nbsp; Y &nbsp;&nbsp; Z</div>
     </div>
     <div class="section">
-      <div class="row"><button id="tetherBtn" class="primary">Tether to...</button><button id="deleteBtn" class="danger">Delete</button></div>
+      <div class="row"><button id="tetherBtn" class="primary">Tether to...</button><button id="removeTetherBtn">Remove tether</button><button id="deleteBtn" class="danger">Delete</button></div>
       <div id="tetherStatus" class="status"></div>
     </div>
   </div>
@@ -106,11 +106,12 @@ var nameInput=document.getElementById("nameInput");
 var px=document.getElementById("px"), py=document.getElementById("py"), pz=document.getElementById("pz");
 var tetherBtn=document.getElementById("tetherBtn");
 var deleteBtn=document.getElementById("deleteBtn");
+var removeTetherBtn=document.getElementById("removeTetherBtn");
 var tetherStatus=document.getElementById("tetherStatus");
 var toastEl=document.getElementById("toast");
 var key="soulhearth_constellation_v2";
 
-var objects=[], links=[], selected=null, tetherMode=false;
+var objects=[], links=[], selected=null, tetherMode=false, removeTetherMode=false;
 var yaw=.7, pitch=.35, distance=13, target={x:0,y:0,z:0};
 var drag={active:false,moved:false,x:0,y:0};
 var objectDrag={active:false,id:null,x:0,y:0};
@@ -165,7 +166,7 @@ function tetherText(){
   tetherStatus.textContent=names.length?"Tethered to: "+names.join(", "):"Not tethered.";
 }
 function select(id){
-  selected=id||null;tetherMode=false;list();
+  selected=id||null;tetherMode=false;removeTetherMode=false;list();
   var o=objects.find(function(x){return x.id===selected});
   if(!o){noSelection.style.display="block";editor.style.display="none";return}
   noSelection.style.display="none";editor.style.display="block";
@@ -208,7 +209,15 @@ nameInput.oninput=function(){
 tetherBtn.onclick=function(){
   if(!selected)return;
   tetherMode=!tetherMode;
+  removeTetherMode=false;
   toast(tetherMode?"Click another object to tether":"Tether mode cancelled");
+};
+
+removeTetherBtn.onclick=function(){
+  if(!selected)return;
+  removeTetherMode=!removeTetherMode;
+  tetherMode=false;
+  toast(removeTetherMode?"Click another object to remove tether":"Remove tether mode cancelled");
 };
 
 function resize(){
@@ -323,7 +332,7 @@ canvas.addEventListener("pointerdown",function(e){
   // While tether mode is active, let the click handler connect
   // the selected object to the clicked target instead of starting
   // an object drag or resetting tether mode.
-  if(e.button===0 && tetherMode && selected && hit && hit.id!==selected){
+  if(e.button===0 && (tetherMode || removeTetherMode) && selected && hit && hit.id!==selected){
     drag={active:false,moved:false,x:e.clientX,y:e.clientY};
   }else if(e.button===0 && hit){
     objectDrag={active:true,id:hit.id,x:e.clientX,y:e.clientY};
@@ -403,6 +412,20 @@ canvas.addEventListener("click",function(e){
   if(drag.moved || objectDrag.active)return;
   var hit=hitObject(e.clientX,e.clientY);
   var best=hit?hit.id:null;
+
+  if(removeTetherMode&&selected&&best&&best!==selected){
+    objectDrag.active=false;
+    var before=links.length;
+    links=links.filter(function(p){
+      return !((p[0]===selected&&p[1]===best)||(p[1]===selected&&p[0]===best));
+    });
+    removeTetherMode=false;
+    save();
+    tetherText();
+    list();
+    toast(links.length<before?"Tether removed":"No tether between these objects");
+    return;
+  }
 
   if(tetherMode&&selected&&best&&best!==selected){
     var exists=links.some(function(p){return(p[0]===selected&&p[1]===best)||(p[1]===selected&&p[0]===best)});
