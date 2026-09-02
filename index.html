@@ -52,7 +52,8 @@ button{color:inherit}.app{height:100%;display:flex;flex-direction:column;backgro
 .bridged{position:absolute;left:20px;bottom:58px;width:230px;max-height:340px;background:rgba(18,20,31,.97);border:1px solid #5d5294;border-radius:8px;box-shadow:0 12px 30px rgba(6,7,12,.6);padding:8px;z-index:16}.member{display:flex;align-items:center;gap:9px;padding:7px;border-radius:6px;cursor:pointer}.member:hover{background:#1f2130}.member .avatar{width:26px;height:26px}.member strong{display:block;font-size:10px;font-weight:500}.member small{display:block;font-size:9px;color:var(--muted);margin-top:3px}
 .notes{position:absolute;right:20px;top:20px;width:280px;max-height:calc(100% - 108px);overflow:auto;background:rgba(18,20,31,.96);border:1px solid var(--line2);border-radius:8px;padding:14px;display:flex;flex-direction:column;gap:10px;z-index:17}.note-row{border:1px solid var(--line);border-radius:7px;padding:9px;background:#161826}.note-row strong{display:block;font-size:10px;margin-bottom:4px}.note-row p{margin:0;color:var(--muted);font-size:9.5px;line-height:1.5}.note-row small{display:block;margin-top:6px;color:var(--dim);font-size:8px}
 .splash{position:absolute;inset:0;z-index:100;background:radial-gradient(circle at 50% 46%,rgba(145,132,217,.16),transparent 60%),#0d0e1a;display:grid;place-items:center;animation:splash 2.4s cubic-bezier(.4,0,.2,1) forwards;cursor:pointer}.splash-inner{text-align:center}.logo{width:210px;height:210px;border:1px dashed #5d5294;border-radius:50%;display:grid;place-items:center;font:500 10px ui-monospace,monospace;letter-spacing:.18em;color:var(--muted);box-shadow:0 0 60px rgba(145,132,217,.16)}.splash-line{width:180px;height:1px;background:linear-gradient(90deg,transparent,rgba(181,171,252,.6),transparent);margin:20px auto}.splash small{font:400 9.5px ui-monospace,monospace;letter-spacing:.16em;color:var(--dim)}@keyframes splash{0%{opacity:1;transform:scale(1)}60%{opacity:1;transform:scale(1.02)}100%{opacity:0;transform:scale(1.07);visibility:hidden}}
-.toast{position:absolute;right:20px;bottom:70px;z-index:90;padding:9px 12px;border:1px solid var(--line2);border-radius:7px;background:#161826;color:var(--muted);font-size:10px;box-shadow:0 8px 24px rgba(0,0,0,.4)}.empty-hint{animation:emptyHintFade 5s ease forwards}@keyframes emptyHintFade{0%,55%{opacity:1}100%{opacity:0;visibility:hidden}}
+.toast{position:absolute;right:20px;bottom:70px;z-index:90;padding:9px 12px;border:1px solid var(--line2);border-radius:7px;background:#161826;color:var(--muted);font-size:10px;box-shadow:0 8px 24px rgba(0,0,0,.4)}
+.unfocus-overlay{position:absolute;inset:0;z-index:120;display:grid;place-items:center;background:rgba(9,10,18,.32);backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px);opacity:0;visibility:hidden;pointer-events:none;transition:opacity .2s ease,visibility .2s ease}.unfocus-overlay.show{opacity:1;visibility:visible}.unfocus-card{padding:14px 20px;border:1px solid rgba(145,132,217,.42);border-radius:10px;background:rgba(18,20,31,.58);box-shadow:0 12px 34px rgba(0,0,0,.26);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);text-align:center}.unfocus-card strong{display:block;color:var(--text);font:500 10px ui-monospace,monospace;letter-spacing:.16em}.unfocus-card span{display:block;margin-top:5px;color:var(--muted);font-size:9px} .empty-hint{animation:emptyHintFade 5s ease forwards}@keyframes emptyHintFade{0%,55%{opacity:1}100%{opacity:0;visibility:hidden}}
 @media(max-width:760px){.brand{min-width:auto;font-size:13px}.search{max-width:none}.auth{min-width:auto}.rail{width:48px;padding:14px 0;align-items:center}.rail:not(.closed){width:48px}.rail .rail-title span,.rail .navitem span,.rail .profile-info{display:none}.rail .rail-title{justify-content:center}.rail .navitem{width:30px;padding:0;justify-content:center}.rail .newnote{width:30px;font-size:0}.rail .newnote b{font-size:15px}.fullgrid,.listgrid{grid-template-columns:1fr}.window{transform:scale(.88);transform-origin:top left}.notes{right:8px;top:8px;width:min(280px,calc(100% - 16px))}}
 </style>
 </head>
@@ -122,6 +123,7 @@ function workspaceHTML(){
  if(state.list) html+=listHTML();
  if(state.modal) html+=modalHTML();
  if(state.splash) html+=`<div class="splash" onclick="endSplash()"><div class="splash-inner"><div class="logo">LOGO VIDEO</div><div class="splash-line"></div><small>TRANSPARENT · MUTED · AUTOPLAY · CLICK TO SKIP</small></div></div>`;
+ html+=`<div class="unfocus-overlay" id="unfocusOverlay"><div class="unfocus-card"><strong>FOCUS BACK TO THE GAME</strong><span>Your game is still running while this window is unfocused.</span></div></div>`;
  return html;
 }
 function windowHTML(name,w){
@@ -246,6 +248,18 @@ function openMember(name){state.bridged=false;state.active='Biography';state.win
 function listHTML(){const q=state.search.toLowerCase();let arr=Object.keys(sections).filter(n=>!q||n.toLowerCase().includes(q)||sections[n].desc.toLowerCase().includes(q));return `<div class="listview"><div style="max-width:900px;margin:0 auto 18px"><div class="section-title">List view</div><p class="sub">The non-map fallback for navigating Soulhearth.</p></div><div class="listgrid">${arr.map(n=>`<div class="listcard" onclick="toggleList();openSection('${esc(n)}')"><h3>${esc(n)}</h3><p>${esc(sections[n].desc)}</p></div>`).join('')||'<div class="sub">No results.</div>'}</div></div>`}
 document.getElementById('searchInput').addEventListener('input',e=>{state.search=e.target.value;if(state.search.trim()){state.list=true}else state.list=false;render()});
 
+/* Keep the scene visible but softly blur it whenever the app window loses focus. */
+function setPageBlurred(blurred){
+ const overlay=document.getElementById('unfocusOverlay');
+ if(overlay) overlay.classList.toggle('show',!!blurred);
+ if(!blurred && window.starfieldResize){
+  requestAnimationFrame(()=>{window.starfieldResize(); if(window.starfieldRender)window.starfieldRender();});
+ }
+}
+window.addEventListener('blur',()=>setPageBlurred(true));
+window.addEventListener('focus',()=>setPageBlurred(false));
+document.addEventListener('visibilitychange',()=>setPageBlurred(document.hidden));
+
 /* Integrated Soulhearth starfield: one persistent 3D layer underneath the existing sections. */
 let starRuntime=null;
 function initStarfield(){
@@ -291,6 +305,8 @@ function initStarfield(){
   let yaw=.7,pitch=.35,distance=13,target=new THREE.Vector3(),selected=null,tetherMode=false,drag={active:false,lastX:0,lastY:0,moved:false},objectDrag=null;
   const raycaster=new THREE.Raycaster(),pointer=new THREE.Vector2();
   function resize(){const r=canvas.getBoundingClientRect();const w=Math.max(1,r.width),h=Math.max(1,r.height);renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix()}
+  window.starfieldResize=resize;
+  window.starfieldRender=()=>renderer.render(scene,camera);
   function cameraUpdate(){const cp=Math.cos(pitch);camera.position.set(target.x+distance*cp*Math.sin(yaw),target.y+distance*Math.sin(pitch),target.z+distance*cp*Math.cos(yaw));camera.lookAt(target)}
   function hit(e){const r=canvas.getBoundingClientRect();pointer.set(((e.clientX-r.left)/r.width)*2-1,-((e.clientY-r.top)/r.height)*2+1);raycaster.setFromCamera(pointer,camera);const hs=raycaster.intersectObjects(Object.values(meshes),true);return hs.length?hs[0].object.userData.id:null}
   function select(id){selected=id||null;tetherMode=false;ring.visible=!!selected;if(selected&&meshes[selected])ring.position.copy(meshes[selected].position);if(window.updateStarfieldPanels)window.updateStarfieldPanels()}
