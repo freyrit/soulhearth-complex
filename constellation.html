@@ -41,7 +41,7 @@ kbd{border:1px solid #454a65;background:#1a1d2d;border-radius:4px;padding:1px 5p
 <canvas id="space"></canvas>
 
 <div class="topbar">
-  <div class="brand">SOULHEARTH</div>
+  <button id="homeBtn" title="Home">← Home</button>
   <div class="hint">CONSTELLATION / 3D SPACE</div>
   <div class="spacer"></div>
   <button id="resetBtn">Reset Space</button>
@@ -187,6 +187,10 @@ deleteBtn.onclick=function(){
   objects=objects.filter(function(x){return x.id!==selected});
   selected=null;save();select(null);toast("Deleted "+(o?o.name:"object"));
 };
+document.getElementById("homeBtn").onclick=function(){
+  window.location.href="https://soulhearth-complex.vercel.app/";
+};
+
 document.getElementById("resetBtn").onclick=function(){
   if(confirm("Reset the constellation?")){localStorage.removeItem(key);location.reload()}
 };
