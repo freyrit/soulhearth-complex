@@ -7,7 +7,6 @@
 <link rel="icon" type="image/png" href="/6e299620-ecc1-4e96-855a-4618d8f3712c.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<script src="https://unpkg.com/three@0.160.1/build/three.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#0f1120;--panel:#1b1d2b;--panel2:#161826;--bar:#232532;--line:#292b31;--line2:#3f424d;--muted:#9397ab;--dim:#5f6377;--text:#e9e9ed;--accent:#b5abfc;--accent2:#9184d9}
@@ -17,6 +16,31 @@ button{color:inherit}.app{height:100%;display:flex;flex-direction:column;backgro
 .brand{min-width:180px;font-size:15px;font-weight:500;letter-spacing:.22em}.search{height:31px;max-width:440px;flex:1;margin:auto;display:flex;align-items:center;gap:8px;border:1px solid var(--line2);border-radius:8px;padding:0 10px;color:var(--muted);cursor:text}.search svg{width:14px}.search input{width:100%;border:0;outline:0;background:transparent;color:var(--text);font-size:11px}.search input::placeholder{color:var(--muted)}
 .auth{display:flex;gap:8px;min-width:180px;justify-content:flex-end}.btn{border:1px solid transparent;background:transparent;border-radius:8px;height:30px;padding:0 13px;cursor:pointer;font-size:11px}.btn:hover{background:#1f2130}.btn.primary{border-color:var(--accent2);color:var(--accent)}.btn.primary:hover{background:rgba(145,132,217,.14)}
 .body{flex:1;min-height:0;display:flex}.rail{width:184px;flex:none;border-right:1px solid var(--line);background:#12141f;padding:14px 12px;display:flex;flex-direction:column;gap:6px;z-index:20}.rail.closed{width:48px;padding:14px 0;align-items:center}.rail-title{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}.rail.closed .rail-title{justify-content:center}.rail-title span{font:500 9px ui-monospace,monospace;letter-spacing:.16em;color:var(--dim)}.rail.closed .rail-title span{display:none}.rail-toggle{width:20px;height:20px}.rail.closed .rail-toggle{width:24px;height:24px}.navitem{height:32px;border-radius:8px;display:flex;align-items:center;gap:10px;padding:0 10px;cursor:pointer;color:var(--muted);font-size:12px}.navitem:hover{background:#1b1d2b;color:var(--text)}.navitem.active{background:#2b2e3d;color:var(--text)}.dot{width:12px;height:12px;border-radius:3px;background:#595d6c;flex:none}.active .dot{background:var(--accent)}.rail.closed .navitem{width:30px;height:30px;padding:0;justify-content:center}.rail.closed .navitem span{display:none}.rail.closed .navitem{gap:0}.rail.closed .railsep{width:22px}.railsep{height:1px;background:var(--line);margin:8px 0}.rail-bottom{margin-top:auto;display:flex;flex-direction:column;gap:12px}.rail.closed .rail-bottom{align-items:center}.newnote{height:34px;border:1px solid var(--accent2);color:var(--accent);border-radius:8px;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;font-size:11px}.newnote:hover{background:rgba(145,132,217,.14)}.rail.closed .newnote{width:30px;font-size:0}.rail.closed .newnote b{font-size:15px}.profile{display:flex;align-items:center;gap:10px;padding:6px;border-radius:8px;cursor:pointer}.profile:hover{background:#1b1d2b}.avatar{width:28px;height:28px;border-radius:50%;background:#2b2e3d;border:1px solid var(--line2);flex:none;display:grid;place-items:center;color:var(--accent);font-size:10px}.rail.closed .profile{padding:0}.rail.closed .profile-info{display:none}.profile-info{display:flex;flex-direction:column;gap:3px}.profile-info strong{font-size:10px;font-weight:500}.profile-info small{font-size:9px;color:var(--dim)}
+#starfieldCanvas{position:absolute;inset:0;width:100%;height:100%;display:block;z-index:0;touch-action:none}.workspace-ui{position:absolute;inset:0;z-index:5;pointer-events:none}.workspace-ui .window,.workspace-ui .map-actions,.workspace-ui .map-tools,.workspace-ui .bridged,.workspace-ui .notes,.workspace-ui .listview,.workspace-ui .overlay,.workspace-ui .splash{pointer-events:auto}.workspace-ui .constellation{pointer-events:none}.workspace-ui .constellation .window{pointer-events:auto}
+
+.star-drawer{position:absolute;left:12px;top:14px;bottom:62px;width:246px;z-index:13;background:rgba(18,20,31,.94);border:1px solid var(--line2);border-radius:9px;backdrop-filter:blur(10px);box-shadow:0 12px 32px rgba(0,0,0,.35);transition:transform .22s ease;pointer-events:auto}
+.star-drawer.closed{transform:translateX(calc(-100% - 13px))}
+.star-drawer-inner{height:100%;padding:12px;overflow:hidden;display:flex;flex-direction:column}
+.star-drawer-toggle{position:absolute;right:-28px;top:92px;width:28px;height:52px;border:1px solid var(--line2);border-left:0;border-radius:0 8px 8px 0;background:rgba(22,24,38,.96);color:var(--accent);cursor:pointer;font-size:18px;display:grid;place-items:center;box-shadow:7px 0 18px rgba(0,0,0,.2)}
+.star-drawer-toggle:hover{background:#202334;color:#ddd7ff}
+.star-ui-title{font:500 9px ui-monospace,monospace;letter-spacing:.14em;color:var(--muted);margin-bottom:9px}
+.star-ui-desc{font-size:9px;color:var(--muted);line-height:1.5;margin-bottom:10px}
+.star-add-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.star-ui-btn{height:29px;border:1px solid var(--line2);border-radius:7px;background:#161826;color:var(--text);font-size:9px;cursor:pointer}
+.star-ui-btn:hover,.star-ui-btn.active{border-color:var(--accent2);color:var(--accent);background:rgba(145,132,217,.12)}
+.star-asset-list{margin-top:10px;border-top:1px solid var(--line);overflow:auto;min-height:0;flex:1}
+.star-asset-item{display:flex;align-items:center;gap:7px;padding:8px 5px;border-bottom:1px solid rgba(63,66,77,.55);cursor:pointer;font-size:9px}
+.star-asset-item:hover,.star-asset-item.selected{background:rgba(145,132,217,.12)}
+.star-asset-dot{width:8px;height:8px;border-radius:50%;background:var(--accent);flex:none}
+.star-asset-item small{margin-left:auto;color:var(--dim);font-size:8px}
+.star-inspector{position:absolute;right:14px;top:14px;width:255px;z-index:13;background:rgba(18,20,31,.94);border:1px solid var(--line2);border-radius:9px;padding:12px;backdrop-filter:blur(10px);box-shadow:0 12px 32px rgba(0,0,0,.35);pointer-events:auto}
+.star-inspector.hidden{display:none}
+.star-ui-input{width:100%;height:30px;border:1px solid var(--line2);border-radius:7px;background:#12141f;color:var(--text);padding:0 8px;font-size:9px;outline:none}
+.star-ui-input:focus{border-color:var(--accent2)}
+.star-ui-status{font-size:9px;color:var(--muted);line-height:1.5}
+.star-inspector-actions{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:10px}
+@media(max-width:900px){.star-drawer{width:214px}.star-inspector{width:220px}}
+
 .workspace{flex:1;position:relative;overflow:hidden;background:radial-gradient(circle at 34% 38%,rgba(145,132,217,.15),transparent 60%),radial-gradient(circle at 78% 84%,rgba(38,42,96,.55),transparent 54%),#0f1120}
 .grid{position:absolute;inset:0;background-image:linear-gradient(rgba(147,151,171,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(147,151,171,.05) 1px,transparent 1px);background-size:34px 34px}.stars{position:absolute;inset:0;background-image:radial-gradient(rgba(233,233,237,.6) 1px,transparent 1.4px);background-size:72px 58px;opacity:.5}
 .constellation{position:absolute;inset:0;transform-origin:top left;transition:transform .2s}.link{position:absolute;height:1px;background:linear-gradient(90deg,transparent,rgba(181,171,252,.38),transparent);transform-origin:left center}
@@ -30,8 +54,6 @@ button{color:inherit}.app{height:100%;display:flex;flex-direction:column;backgro
 .splash{position:absolute;inset:0;z-index:100;background:radial-gradient(circle at 50% 46%,rgba(145,132,217,.16),transparent 60%),#0d0e1a;display:grid;place-items:center;animation:splash 2.4s cubic-bezier(.4,0,.2,1) forwards;cursor:pointer}.splash-inner{text-align:center}.logo{width:210px;height:210px;border:1px dashed #5d5294;border-radius:50%;display:grid;place-items:center;font:500 10px ui-monospace,monospace;letter-spacing:.18em;color:var(--muted);box-shadow:0 0 60px rgba(145,132,217,.16)}.splash-line{width:180px;height:1px;background:linear-gradient(90deg,transparent,rgba(181,171,252,.6),transparent);margin:20px auto}.splash small{font:400 9.5px ui-monospace,monospace;letter-spacing:.16em;color:var(--dim)}@keyframes splash{0%{opacity:1;transform:scale(1)}60%{opacity:1;transform:scale(1.02)}100%{opacity:0;transform:scale(1.07);visibility:hidden}}
 .toast{position:absolute;right:20px;bottom:70px;z-index:90;padding:9px 12px;border:1px solid var(--line2);border-radius:7px;background:#161826;color:var(--muted);font-size:10px;box-shadow:0 8px 24px rgba(0,0,0,.4)}
 @media(max-width:760px){.brand{min-width:auto;font-size:13px}.search{max-width:none}.auth{min-width:auto}.rail{width:48px;padding:14px 0;align-items:center}.rail:not(.closed){width:48px}.rail .rail-title span,.rail .navitem span,.rail .profile-info{display:none}.rail .rail-title{justify-content:center}.rail .navitem{width:30px;padding:0;justify-content:center}.rail .newnote{width:30px;font-size:0}.rail .newnote b{font-size:15px}.fullgrid,.listgrid{grid-template-columns:1fr}.window{transform:scale(.88);transform-origin:top left}.notes{right:8px;top:8px;width:min(280px,calc(100% - 16px))}}
-
-.starfield-canvas{position:absolute;inset:0;width:100%;height:100%;display:block;z-index:1}.starfield-ui{position:absolute;inset:0;z-index:5;pointer-events:none}.sf-panel{position:absolute;top:14px;bottom:58px;width:min(245px,22vw);background:rgba(18,20,31,.9);border:1px solid var(--line2);border-radius:8px;padding:12px;backdrop-filter:blur(8px);pointer-events:auto;box-shadow:0 10px 28px rgba(0,0,0,.35)}.sf-left{left:14px}.sf-right{right:14px;width:min(260px,23vw)}.sf-title{font:500 9px ui-monospace,monospace;letter-spacing:.14em;color:var(--muted);margin-bottom:9px}.sf-desc{font-size:9px;color:var(--muted);line-height:1.5;margin-bottom:10px}.sf-actions{display:grid;grid-template-columns:1fr 1fr;gap:6px}.sf-btn{height:28px;border:1px solid var(--line2);border-radius:7px;background:#161826;color:var(--text);font-size:9px;cursor:pointer}.sf-btn:hover,.sf-btn.active{border-color:var(--accent2);color:var(--accent);background:rgba(145,132,217,.12)}.sf-list{margin-top:9px;border-top:1px solid var(--line);max-height:calc(100% - 220px);overflow:auto}.sf-item{display:flex;align-items:center;gap:7px;padding:7px 5px;border-bottom:1px solid rgba(63,66,77,.55);cursor:pointer;font-size:9px}.sf-item:hover,.sf-item.sel{background:rgba(145,132,217,.12)}.sf-dot{width:8px;height:8px;border-radius:50%;background:var(--accent);flex:none}.sf-item small{margin-left:auto;color:var(--dim);font-size:8px}.sf-status{font-size:9px;color:var(--muted);line-height:1.5}.sf-input{width:100%;height:29px;border:1px solid var(--line2);border-radius:7px;background:#12141f;color:var(--text);padding:0 8px;font-size:9px;outline:0}.sf-input:focus{border-color:var(--accent2)}.sf-bottom{position:absolute;left:50%;bottom:18px;transform:translateX(-50%);z-index:6;display:flex;gap:7px;pointer-events:auto}.sf-chip{height:28px;padding:0 11px;border:1px solid var(--line2);border-radius:999px;background:rgba(22,24,38,.92);color:var(--muted);font-size:9px;cursor:pointer}.sf-chip:hover{border-color:var(--accent2);color:var(--text)}.sf-help{position:absolute;left:50%;bottom:57px;transform:translateX(-50%);color:var(--dim);font-size:9px;pointer-events:none;white-space:nowrap}.sf-hide{display:none!important}@media(max-width:900px){.sf-panel{width:210px}.sf-right{width:220px}}
 </style>
 </head>
 <body>
@@ -64,29 +86,31 @@ const members=[
  ['Mira','worldbuilding · illustration'],['Rowan','stories · lore'],['Aster','music · worlds'],
  ['June','artwork · writing'],['Sol','design · community']
 ];
-let state={rail:true,active:'Overview',windows:{},bridged:false,notes:false,list:false,zoom:1,search:'',splash:false,modal:null,settingsTab:'Account'};
+let state={rail:true,active:'Biography',windows:{},bridged:false,notes:false,list:false,zoom:1,search:'',splash:true,modal:null,settingsTab:'Account'};
 let z=20, notes=JSON.parse(localStorage.getItem('soulhearth_notes')||'[]');
 
 function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));}
 function initials(n){return n.split(' ').map(x=>x[0]).join('').slice(0,2).toUpperCase();}
 function railHTML(){
- const groups=[['Overview','Biography','Worlds','Stories','Artwork','Community'],['Devlog','Lore / Wiki','Gallery']];
+ const groups=[['Biography','Worlds','Stories','Artwork','Community'],['Devlog','Lore / Wiki','Gallery']];
  return `<div class="rail-title"><span>SECTIONS</span><button class="iconbtn rail-toggle" onclick="toggleRail()">${state.rail?'‹':'›'}</button></div>`+
  groups.map((g,i)=>g.map(n=>`<div class="navitem ${state.active===n?'active':''}" onclick="openSection('${esc(n)}')"><i class="dot"></i><span>${n}</span></div>`).join('')+(i===0?'<div class="railsep"></div>':'')).join('')+
- `<div class="navitem" onclick="window.location.href='constellation.html'" title="Constellation / 3D Space"><i class="dot"></i><span>Constellation / 3D Space</span></div>
- <div class="rail-bottom"><button class="newnote" onclick="openNote()"><b>+</b><span>New note</span></button>
+ `<div class="rail-bottom"><button class="newnote" onclick="openNote()"><b>+</b><span>New note</span></button>
  <div class="profile" onclick="openSettings()"><div class="avatar">SH</div><div class="profile-info"><strong>My profile</strong><small>settings</small></div></div></div>`;
 }
 function render(){
  document.getElementById('rail').className='rail '+(!state.rail?'closed':'');
  document.getElementById('rail').innerHTML=railHTML();
- document.getElementById('workspace').innerHTML=workspaceHTML();
+ const workspace=document.getElementById('workspace');
+ if(!document.getElementById('starfieldCanvas')){
+   workspace.innerHTML='<canvas id="starfieldCanvas"></canvas><div class="workspace-ui" id="workspaceUI"></div>';
+   initStarfield();
+ }
+ document.getElementById('workspaceUI').innerHTML=workspaceHTML();
  bindDrag();
- if(state.active==='Overview') setTimeout(sfInit,0);
 }
 function workspaceHTML(){
- if(state.active==='Overview') return starfieldHTML();
- let html=`<div class="grid"></div><div class="stars"></div><div class="constellation" style="transform:scale(${state.zoom})">
+ let html=`<div class="constellation" style="transform:scale(${state.zoom})">
  <div class="link" style="left:290px;top:190px;width:210px;transform:rotate(-13deg)"></div>
  <div class="link" style="left:470px;top:150px;width:250px;transform:rotate(22deg)"></div>
  <div class="link" style="left:250px;top:410px;width:260px;transform:rotate(-18deg)"></div>
@@ -102,26 +126,6 @@ function workspaceHTML(){
  if(state.modal) html+=modalHTML();
  if(state.splash) html+=`<div class="splash" onclick="endSplash()"><div class="splash-inner"><div class="logo">LOGO VIDEO</div><div class="splash-line"></div><small>TRANSPARENT · MUTED · AUTOPLAY · CLICK TO SKIP</small></div></div>`;
  return html;
-}
-function starfieldHTML(){
- return `<canvas id="starfieldCanvas" class="starfield-canvas"></canvas>
- <div class="starfield-ui">
-   <div class="sf-panel sf-left">
-     <div class="sf-title">STAR SYSTEM</div>
-     <div class="sf-desc">Your universe is made from modular assets. Place Souls, Artifacts, Hearths and Stars anywhere, then tether any two things together.</div>
-     <div class="sf-actions">
-       <button class="sf-btn" onclick="sfAdd('soul')">+ Soul</button><button class="sf-btn" onclick="sfAdd('artifact')">+ Artifact</button>
-       <button class="sf-btn" onclick="sfAdd('hearth')">+ Hearth</button><button class="sf-btn" onclick="sfAdd('star')">+ Star</button>
-     </div>
-     <div class="sf-list">${sfObjects.map(o=>`<div class="sf-item ${sfSelected===o.id?'sel':''}" onclick="sfSelect('${o.id}')"><i class="sf-dot"></i><span>${esc(o.name)}</span><small>${o.type}</small></div>`).join('')||'<div class="sf-status" style="padding:12px 5px">No assets yet.</div>'}</div>
-   </div>
-   <div class="sf-panel sf-right">
-     <div class="sf-title">SELECTED ASSET</div>
-     ${sfSelected?`<input class="sf-input" value="${esc((sfFind(sfSelected)||{}).name||'')}" oninput="sfRename('${sfSelected}',this.value)"><div class="sf-status" style="margin-top:8px">TYPE · ${(sfFind(sfSelected)||{}).type||''}</div><div style="height:1px;background:var(--line);margin:10px 0"></div><div class="sf-title" style="margin-bottom:6px">TETHERS</div><div class="sf-status">${sfTetherNames(sfSelected)||'None'}</div><div class="sf-actions" style="margin-top:10px"><button class="sf-btn" onclick="sfTether()">Tether to...</button><button class="sf-btn" onclick="sfDelete()">Delete</button></div>`:'<div class="sf-status">Select a Soul, Artifact, Hearth or Star.</div>'}
-   </div>
-   <div class="sf-bottom"><button class="sf-chip ${sfMode==='my'?'active':''}" onclick="sfMode='my';sfRender()">My universe</button><button class="sf-chip ${sfMode==='neighbors'?'active':''}" onclick="sfMode='neighbors';sfRender()">Neighbors</button><button class="sf-chip" onclick="sfResetView()">Reset view</button></div>
-   <div class="sf-help">Drag empty space = orbit · Drag an asset = move it · Wheel = zoom · Click = select</div>
- </div>`;
 }
 function windowHTML(name,w){
  const x=w.x,y=w.y,width=w.width,height=w.height,focus=state.active===name;
@@ -152,7 +156,6 @@ function fullView(name){
 let expanded=null;
 function openSection(name){
  state.active=name;
- if(name==='Overview'){state.bridged=false;state.list=false;render();return;}
  if(!state.windows[name]){let i=Object.keys(state.windows).length;let defaults=[[56,74,300,196],[432,56,300,208],[806,118,286,230],[150,330,330,222],[552,346,300,214],[906,396,224,150],[1014,216,210,140],[898,596,236,152]][i%8];state.windows[name]={x:defaults[0],y:defaults[1],width:defaults[2],height:defaults[3],z:++z};}
  else state.windows[name].z=++z;
  state.bridged=false;render();
@@ -198,33 +201,146 @@ function toast(msg){let t=document.createElement('div');t.className='toast';t.te
 function bridgedHTML(){return `<div class="bridged"><div style="display:flex;justify-content:space-between;align-items:center;padding:2px 4px 6px"><span style="font:500 9px ui-monospace,monospace;letter-spacing:.14em;color:var(--muted)">SHARED INTERESTS</span><button class="iconbtn" onclick="toggleBridged()">✕</button></div>${members.map(m=>`<div class="member" onclick="openMember('${esc(m[0])}')"><div class="avatar">${initials(m[0])}</div><div><strong>${esc(m[0])}</strong><small>${esc(m[1])}</small></div></div>`).join('')}<div style="padding:6px;color:var(--dim);font-size:9px">Up to 5 · click a user to open their profile</div></div>`}
 function openMember(name){state.bridged=false;state.active='Biography';state.windows={Biography:{x:56,y:74,width:330,height:220,z:++z}};render();toast('Opened '+name+' demo profile.')}
 function listHTML(){const q=state.search.toLowerCase();let arr=Object.keys(sections).filter(n=>!q||n.toLowerCase().includes(q)||sections[n].desc.toLowerCase().includes(q));return `<div class="listview"><div style="max-width:900px;margin:0 auto 18px"><div class="section-title">List view</div><p class="sub">The non-map fallback for navigating Soulhearth.</p></div><div class="listgrid">${arr.map(n=>`<div class="listcard" onclick="toggleList();openSection('${esc(n)}')"><h3>${esc(n)}</h3><p>${esc(sections[n].desc)}</p></div>`).join('')||'<div class="sub">No results.</div>'}</div></div>`}
-
-// Integrated Soulhearth starfield layer. All asset types share one persistent model.
-let sfObjects=[],sfLinks=[],sfSelected=null,sfMode='my',sfTetherMode=false;
-let sfScene=null,sfCamera=null,sfRenderer=null,sfMeshes={},sfLines={},sfDrag={kind:null,id:null,x:0,y:0},sfYaw=.7,sfPitch=.35,sfDistance=13,sfTarget=null,sfAnim=0;
-const SFKEY='soulhearth_starfield_v1';
-function sfLoad(){try{const d=JSON.parse(localStorage.getItem(SFKEY)||'null');if(d&&Array.isArray(d.objects)){sfObjects=d.objects;sfLinks=Array.isArray(d.links)?d.links:[];return}}catch(e){}sfObjects=[{id:sfUid(),type:'star',name:'Sol',x:-2,y:.5,z:0},{id:sfUid(),type:'star',name:'Alpha',x:2,y:1,z:-1},{id:sfUid(),type:'hearth',name:'Hearth',x:0,y:-.5,z:1.2},{id:sfUid(),type:'soul',name:'First Soul',x:-.2,y:.1,z:.2},{id:sfUid(),type:'artifact',name:'First Artifact',x:.9,y:-.1,z:-.8}];sfLinks=[[sfObjects[0].id,sfObjects[2].id],[sfObjects[2].id,sfObjects[3].id],[sfObjects[3].id,sfObjects[4].id]];sfSave()}
-function sfSave(){try{localStorage.setItem(SFKEY,JSON.stringify({objects:sfObjects,links:sfLinks}))}catch(e){}}
-function sfUid(){return Math.random().toString(36).slice(2,10)}
-function sfFind(id){return sfObjects.find(o=>o.id===id)}
-function sfTetherNames(id){return sfLinks.map(p=>p[0]===id?sfFind(p[1]):p[1]===id?sfFind(p[0]):null).filter(Boolean).map(o=>esc(o.name)).join(', ')}
-function sfAdd(type){const labels={soul:'Soul',artifact:'Artifact',hearth:'Hearth',star:'Star'};const o={id:sfUid(),type,name:labels[type]+' '+(sfObjects.filter(x=>x.type===type).length+1),x:Math.random()*6-3,y:Math.random()*3-1.5,z:Math.random()*6-3};sfObjects.push(o);sfSelected=o.id;sfSave();sfRender()}
-function sfRename(id,name){const o=sfFind(id);if(o){o.name=name||'Unnamed';sfSave();const m=sfMeshes[id];if(m)m.userData.name=o.name;sfRender(false)}}
-function sfSelect(id){sfSelected=id||null;sfTetherMode=false;sfRender(false)}
-function sfDelete(){if(!sfSelected)return;sfLinks=sfLinks.filter(p=>p[0]!==sfSelected&&p[1]!==sfSelected);sfObjects=sfObjects.filter(o=>o.id!==sfSelected);sfSelected=null;sfSave();sfRender()}
-function sfTether(){if(sfSelected){sfTetherMode=!sfTetherMode}}
-function sfResetView(){sfYaw=.7;sfPitch=.35;sfDistance=13;if(sfCamera)sfUpdateCamera()}
-function sfMakeMesh(o){let g=new THREE.Group(),body,r=.25;if(o.type==='star'){r=.3;body=new THREE.Mesh(new THREE.SphereGeometry(r,24,18),new THREE.MeshStandardMaterial({color:0xffcc68,emissive:0xff9d24,emissiveIntensity:2,roughness:.45}));g.add(new THREE.Mesh(new THREE.SphereGeometry(.58,20,14),new THREE.MeshBasicMaterial({color:0xffb64b,transparent:true,opacity:.09,depthWrite:false,blending:THREE.AdditiveBlending})));g.add(body);g.add(new THREE.PointLight(0xffba5c,2.5,6))}else if(o.type==='hearth'){r=.34;body=new THREE.Mesh(new THREE.IcosahedronGeometry(r,1),new THREE.MeshStandardMaterial({color:0xbba9ff,roughness:.35,metalness:.3,emissive:0x22114c,emissiveIntensity:.5}));g.add(body);g.add(new THREE.Mesh(new THREE.TorusGeometry(.48,.018,8,30),new THREE.MeshBasicMaterial({color:0xd9d0ff,transparent:true,opacity:.65})))}else if(o.type==='soul'){r=.27;body=new THREE.Mesh(new THREE.SphereGeometry(r,24,18),new THREE.MeshStandardMaterial({color:0xf1c5ff,roughness:.4,metalness:.15,emissive:0x35164c,emissiveIntensity:.55}));g.add(body)}else{r=.25;body=new THREE.Mesh(new THREE.BoxGeometry(.38,.38,.38),new THREE.MeshStandardMaterial({color:0x8fd5ff,roughness:.5,metalness:.5,emissive:0x102b4c,emissiveIntensity:.35}));g.add(body);g.rotation.set(.25,.4,.15)}g.position.set(o.x,o.y,o.z);g.userData.id=o.id;g.userData.radius=r;g.traverse(x=>{if(x.isMesh)x.userData.id=o.id});sfScene.add(g);sfMeshes[o.id]=g}
-function sfRebuild(){Object.values(sfMeshes).forEach(m=>sfScene.remove(m));sfMeshes={};Object.values(sfLines).forEach(l=>sfScene.remove(l));sfLines={};sfObjects.forEach(sfMakeMesh);sfLinks.forEach((p,i)=>{const a=sfFind(p[0]),b=sfFind(p[1]);if(!a||!b)return;const geo=new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(a.x,a.y,a.z),new THREE.Vector3(b.x,b.y,b.z)]);sfLines[i]=new THREE.Line(geo,new THREE.LineBasicMaterial({color:0xb9adff,transparent:true,opacity:.8}));sfScene.add(sfLines[i])})}
-function sfInit(){const c=document.getElementById('starfieldCanvas');if(!c||typeof THREE==='undefined')return;sfRenderer=new THREE.WebGLRenderer({canvas:c,antialias:true});sfRenderer.setPixelRatio(Math.min(devicePixelRatio||1,2));sfRenderer.outputColorSpace=THREE.SRGBColorSpace;sfRenderer.setClearColor(0x050713);sfScene=new THREE.Scene();sfScene.fog=new THREE.FogExp2(0x050713,.025);sfCamera=new THREE.PerspectiveCamera(50,1,.1,200);sfTarget=new THREE.Vector3();sfScene.add(new THREE.HemisphereLight(0x9fb4ff,0x090713,1.25));const sun=new THREE.DirectionalLight(0xd6dcff,2.1);sun.position.set(-5,8,6);sfScene.add(sun);const grid=new THREE.GridHelper(20,20,0x4d5686,0x232842);grid.material.transparent=true;grid.material.opacity=.38;sfScene.add(grid);const geo=new THREE.BufferGeometry(),pts=[];for(let i=0;i<900;i++){const r=35+Math.random()*55,t=Math.random()*Math.PI*2,u=Math.acos(Math.random()*2-1);pts.push(r*Math.sin(u)*Math.cos(t),r*Math.cos(u),r*Math.sin(u)*Math.sin(t))}geo.setAttribute('position',new THREE.Float32BufferAttribute(pts,3));sfScene.add(new THREE.Points(geo,new THREE.PointsMaterial({color:0xdedee8,size:.13,sizeAttenuation:true})));sfRebuild();sfResize();sfBind(c);if(sfAnim)cancelAnimationFrame(sfAnim);sfFrame()}
-function sfResize(){if(!sfRenderer||!sfCamera)return;const c=document.getElementById('starfieldCanvas');if(!c)return;const w=c.clientWidth||document.getElementById('workspace').clientWidth,h=c.clientHeight||document.getElementById('workspace').clientHeight;sfRenderer.setSize(w,h,false);sfCamera.aspect=w/Math.max(1,h);sfCamera.updateProjectionMatrix()}
-function sfUpdateCamera(){const cp=Math.cos(sfPitch);sfCamera.position.set(sfTarget.x+sfDistance*cp*Math.sin(sfYaw),sfTarget.y+sfDistance*Math.sin(sfPitch),sfTarget.z+sfDistance*cp*Math.cos(sfYaw));sfCamera.lookAt(sfTarget)}
-function sfHit(e){const c=document.getElementById('starfieldCanvas'),r=c.getBoundingClientRect(),p=new THREE.Vector2(((e.clientX-r.left)/r.width)*2-1,-((e.clientY-r.top)/r.height)*2+1);const ray=new THREE.Raycaster();ray.setFromCamera(p,sfCamera);const h=ray.intersectObjects(Object.values(sfMeshes),true);return h.length?sfFind(h[0].object.userData.id):null}
-function sfBind(c){c.onpointerdown=e=>{const o=sfHit(e);if(o&&sfTetherMode&&sfSelected&&o.id!==sfSelected){const exists=sfLinks.some(p=>(p[0]===sfSelected&&p[1]===o.id)||(p[1]===sfSelected&&p[0]===o.id));if(!exists)sfLinks.push([sfSelected,o.id]);sfTetherMode=false;sfSave();sfRebuild();return}if(o){sfSelected=o.id;sfDrag={kind:'object',id:o.id,x:e.clientX,y:e.clientY}}else sfDrag={kind:'camera',id:null,x:e.clientX,y:e.clientY};c.setPointerCapture(e.pointerId)};c.onpointermove=e=>{if(!sfDrag.kind)return;const dx=e.clientX-sfDrag.x,dy=e.clientY-sfDrag.y;if(sfDrag.kind==='camera'){sfYaw-=dx*.008;sfPitch=Math.max(-1.45,Math.min(1.45,sfPitch-dy*.008))}else{const o=sfFind(sfDrag.id);if(o){o.x+=dx*.012;o.y-=dy*.012;const m=sfMeshes[o.id];m.position.set(o.x,o.y,o.z);sfRebuild();}}sfDrag.x=e.clientX;sfDrag.y=e.clientY};c.onpointerup=()=>{if(sfDrag.kind==='object')sfSave();sfDrag={kind:null,id:null,x:0,y:0}};c.onwheel=e=>{e.preventDefault();sfDistance=Math.max(4,Math.min(35,sfDistance*Math.exp(e.deltaY*.001)))}};
-function sfFrame(){if(!document.getElementById('starfieldCanvas'))return;sfAnim=requestAnimationFrame(sfFrame);sfResize();sfUpdateCamera();if(sfSelected&&sfMeshes[sfSelected]){sfMeshes[sfSelected].scale.setScalar(1.2+Math.sin(Date.now()*.004)*.08)}sfRenderer.render(sfScene,sfCamera)}
-function sfRender(reinit=true){if(state.active!=='Overview'){render();return}if(reinit){render();}else{const left=document.querySelector('.sf-list');if(left)left.innerHTML=sfObjects.map(o=>`<div class="sf-item ${sfSelected===o.id?'sel':''}" onclick="sfSelect('${o.id}')"><i class="sf-dot"></i><span>${esc(o.name)}</span><small>${o.type}</small></div>`).join('')||'<div class="sf-status" style="padding:12px 5px">No assets yet.</div>';render()}}
-sfLoad();
 document.getElementById('searchInput').addEventListener('input',e=>{state.search=e.target.value;if(state.search.trim()){state.list=true}else state.list=false;render()});
+
+/* Integrated Soulhearth starfield: one persistent 3D layer underneath the existing sections. */
+let starRuntime=null;
+function initStarfield(){
+ const canvas=document.getElementById('starfieldCanvas');
+ const start=()=>{
+  if(!window.THREE||starRuntime)return;
+  const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:false});
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2));
+  renderer.outputColorSpace=THREE.SRGBColorSpace;
+  renderer.setClearColor(0x050713,1);
+  const scene=new THREE.Scene();
+  scene.fog=new THREE.FogExp2(0x050713,.022);
+  const camera=new THREE.PerspectiveCamera(50,1,.1,200);
+  const root=new THREE.Group(); scene.add(root);
+  scene.add(new THREE.HemisphereLight(0x9fb4ff,0x090713,1.2));
+  const sun=new THREE.DirectionalLight(0xd6dcff,2.0); sun.position.set(-5,8,6); scene.add(sun);
+  const grid=new THREE.GridHelper(28,28,0x4d5686,0x232842); grid.material.transparent=true; grid.material.opacity=.34; root.add(grid);
+  const bgGeo=new THREE.BufferGeometry(), bg=[], bgCol=[];
+  for(let i=0;i<1100;i++){let r=35+Math.random()*55,t=Math.random()*Math.PI*2,u=Math.acos(Math.random()*2-1);bg.push(r*Math.sin(u)*Math.cos(t),r*Math.cos(u),r*Math.sin(u)*Math.sin(t));let c=.45+Math.random()*.55;bgCol.push(c,c,c+.12)}
+  bgGeo.setAttribute('position',new THREE.Float32BufferAttribute(bg,3));bgGeo.setAttribute('color',new THREE.Float32BufferAttribute(bgCol,3));
+  scene.add(new THREE.Points(bgGeo,new THREE.PointsMaterial({size:.13,vertexColors:true,sizeAttenuation:true})));
+  const objects=[
+   {id:'sol',type:'star',name:'Sol',x:-2,y:.5,z:0},
+   {id:'alpha',type:'star',name:'Alpha',x:2,y:1,z:-1},
+   {id:'hearth',type:'hearth',name:'Hearth',x:0,y:-.3,z:1.4},
+   {id:'soul',type:'soul',name:'First Soul',x:-.7,y:1.9,z:.2},
+   {id:'artifact',type:'artifact',name:'First Artifact',x:1.2,y:1.0,z:-.1}
+  ];
+  let links=[['sol','hearth'],['hearth','soul'],['soul','artifact']];
+  const meshes={}; const lineMeshes=[]; const labels={};
+  const make=(o)=>{
+   const g=new THREE.Group(); let body,r=.25;
+   if(o.type==='star'){r=.3;body=new THREE.Mesh(new THREE.SphereGeometry(r,32,24),new THREE.MeshStandardMaterial({color:0xffcc68,emissive:0xff9d24,emissiveIntensity:2.1,roughness:.45}));const aura=new THREE.Mesh(new THREE.SphereGeometry(.58,24,16),new THREE.MeshBasicMaterial({color:0xffb64b,transparent:true,opacity:.09,depthWrite:false,blending:THREE.AdditiveBlending}));g.add(aura,body);g.add(new THREE.PointLight(0xffba5c,2.5,6));}
+   else if(o.type==='hearth'){r=.28;body=new THREE.Mesh(new THREE.SphereGeometry(r,32,24),new THREE.MeshStandardMaterial({color:0x5b8dff,roughness:.65,metalness:.12,emissive:0x101f55,emissiveIntensity:.35}));g.add(body);}
+   else if(o.type==='soul'){r=.26;body=new THREE.Mesh(new THREE.SphereGeometry(r,28,20),new THREE.MeshStandardMaterial({color:0xbba9ff,roughness:.35,metalness:.38,emissive:0x22114c,emissiveIntensity:.5}));g.add(body);}
+   else {r=.25;body=new THREE.Mesh(new THREE.IcosahedronGeometry(r,0),new THREE.MeshStandardMaterial({color:0x6f98c8,roughness:.4,metalness:.4,emissive:0x12213d,emissiveIntensity:.35}));g.add(body);}
+   g.position.set(o.x,o.y,o.z);g.userData.id=o.id;g.userData.baseScale=1;g.userData.radius=r;g.traverse(m=>{if(m.isMesh)m.userData.id=o.id});root.add(g);meshes[o.id]=g;
+  };
+  objects.forEach(make);
+  const ring=new THREE.Mesh(new THREE.TorusGeometry(1,.025,8,48),new THREE.MeshBasicMaterial({color:0xb9adff,transparent:true,opacity:.95}));ring.visible=false;root.add(ring);
+  function rebuildLinks(){lineMeshes.forEach(l=>root.remove(l));lineMeshes.length=0;for(const [a,b] of links){const A=objects.find(o=>o.id===a),B=objects.find(o=>o.id===b);if(!A||!B)continue;const geo=new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(A.x,A.y,A.z),new THREE.Vector3(B.x,B.y,B.z)]);const line=new THREE.Line(geo,new THREE.LineBasicMaterial({color:0xb9adff,transparent:true,opacity:.78}));root.add(line);lineMeshes.push(line)}}
+  rebuildLinks();
+  let yaw=.7,pitch=.35,distance=13,target=new THREE.Vector3(),selected=null,tetherMode=false,drag={active:false,lastX:0,lastY:0,moved:false},objectDrag=null;
+  const raycaster=new THREE.Raycaster(),pointer=new THREE.Vector2();
+  function resize(){const r=canvas.getBoundingClientRect();const w=Math.max(1,r.width),h=Math.max(1,r.height);renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix()}
+  function cameraUpdate(){const cp=Math.cos(pitch);camera.position.set(target.x+distance*cp*Math.sin(yaw),target.y+distance*Math.sin(pitch),target.z+distance*cp*Math.cos(yaw));camera.lookAt(target)}
+  function hit(e){const r=canvas.getBoundingClientRect();pointer.set(((e.clientX-r.left)/r.width)*2-1,-((e.clientY-r.top)/r.height)*2+1);raycaster.setFromCamera(pointer,camera);const hs=raycaster.intersectObjects(Object.values(meshes),true);return hs.length?hs[0].object.userData.id:null}
+  function select(id){selected=id||null;tetherMode=false;ring.visible=!!selected;if(selected&&meshes[selected])ring.position.copy(meshes[selected].position);if(window.updateStarfieldPanels)window.updateStarfieldPanels()}
+  function objectPoint(e,plane){const r=canvas.getBoundingClientRect();pointer.set(((e.clientX-r.left)/r.width)*2-1,-((e.clientY-r.top)/r.height)*2+1);raycaster.setFromCamera(pointer,camera);const p=new THREE.Vector3();return raycaster.ray.intersectPlane(plane,p)?p:null}
+  canvas.addEventListener('pointerdown',e=>{if(e.button!==0)return;const id=hit(e);if(tetherMode&&selected&&id&&id!==selected){const exists=links.some(p=>(p[0]===selected&&p[1]===id)||(p[1]===selected&&p[0]===id));if(!exists){links.push([selected,id]);rebuildLinks()}tetherMode=false;if(window.updateStarfieldPanels)window.updateStarfieldPanels();return}if(id){select(id);const normal=camera.getWorldDirection(new THREE.Vector3());const plane=new THREE.Plane().setFromNormalAndCoplanarPoint(normal,meshes[id].position);const p=objectPoint(e,plane);objectDrag={id,plane,offset:p?meshes[id].position.clone().sub(p):new THREE.Vector3()};canvas.setPointerCapture(e.pointerId);drag={active:false,lastX:e.clientX,lastY:e.clientY,moved:false};}else{select(null);if(starDrawerOpen){starDrawerOpen=false;const drawer=document.getElementById('starSystemDrawer');if(drawer)drawer.classList.add('closed');const btn=document.getElementById('starDrawerToggle');if(btn){btn.textContent='›';btn.title='Open star system tools'}}drag={active:true,lastX:e.clientX,lastY:e.clientY,moved:false};canvas.setPointerCapture(e.pointerId)}});
+  canvas.addEventListener('pointermove',e=>{if(objectDrag){const p=objectPoint(e,objectDrag.plane);if(p){p.add(objectDrag.offset);const o=objects.find(x=>x.id===objectDrag.id);o.x=p.x;o.y=p.y;o.z=p.z;meshes[o.id].position.copy(p);ring.position.copy(p);rebuildLinks()}return}if(!drag.active)return;const dx=e.clientX-drag.lastX,dy=e.clientY-drag.lastY;if(Math.abs(dx)+Math.abs(dy)>2)drag.moved=true;yaw-=dx*.008;pitch=Math.max(-1.45,Math.min(1.45,pitch-dy*.008));drag.lastX=e.clientX;drag.lastY=e.clientY});
+  canvas.addEventListener('pointerup',()=>{objectDrag=null;drag.active=false});canvas.addEventListener('pointercancel',()=>{objectDrag=null;drag.active=false});canvas.addEventListener('wheel',e=>{e.preventDefault();distance=Math.max(4,Math.min(35,distance*Math.exp(e.deltaY*.001)))},{passive:false});
+  const ro=new ResizeObserver(resize);ro.observe(canvas);window.addEventListener('resize',resize);resize();
+  starRuntime={
+   objects,meshes,get links(){return links},rebuildLinks,
+   getSelected:()=>selected,
+   select,
+   add(type){
+    const names={soul:'Soul',artifact:'Artifact',hearth:'Hearth',star:'Star'};
+    const o={id:'asset_'+Math.random().toString(36).slice(2,10),type,name:names[type]+' '+(objects.filter(x=>x.type===type).length+1),x:Math.random()*5-2.5,y:Math.random()*2.6-1.3,z:Math.random()*5-2.5};
+    objects.push(o);make(o);select(o.id);if(window.updateStarfieldPanels)window.updateStarfieldPanels();
+   },
+   rename(name){const o=objects.find(x=>x.id===selected);if(o){o.name=name||'Unnamed';if(window.updateStarfieldPanels)window.updateStarfieldPanels(false)}},
+   remove(){
+    if(!selected)return;const id=selected;const i=objects.findIndex(x=>x.id===id);if(i>=0)objects.splice(i,1);
+    if(meshes[id]){root.remove(meshes[id]);delete meshes[id]}
+    links=links.filter(p=>p[0]!==id&&p[1]!==id);rebuildLinks();selected=null;ring.visible=false;if(window.updateStarfieldPanels)window.updateStarfieldPanels();
+   },
+   tether(){if(selected){tetherMode=!tetherMode;if(window.updateStarfieldPanels)window.updateStarfieldPanels()}},
+   isTethering:()=>tetherMode,
+   tetherNames(){if(!selected)return[];return links.map(p=>p[0]===selected?objects.find(o=>o.id===p[1]):p[1]===selected?objects.find(o=>o.id===p[0]):null).filter(Boolean).map(o=>o.name)}
+  };
+  if(window.ensureStarfieldPanels)window.ensureStarfieldPanels();
+  function frame(t){requestAnimationFrame(frame);cameraUpdate();if(selected&&meshes[selected]){const pulse=1+Math.sin(t*.004)*.09;ring.position.copy(meshes[selected].position);ring.quaternion.copy(camera.quaternion);ring.scale.setScalar((meshes[selected].userData.radius||.3)*1.55);ring.scale.multiplyScalar(pulse);meshes[selected].scale.setScalar(1+Math.sin(t*.004)*.055)}objects.forEach(o=>{if(o.id!==selected)meshes[o.id].scale.lerp(new THREE.Vector3(1,1,1),.2)});renderer.render(scene,camera)}
+  requestAnimationFrame(frame);
+ };
+ const load=(src,cb)=>{const s=document.createElement('script');s.src=src;s.onload=cb;s.onerror=()=>cb();document.head.appendChild(s)};
+ if(window.THREE)start();else load('https://unpkg.com/three@0.160.1/build/three.min.js',start);
+}
+
+let starDrawerOpen=false;
+window.toggleStarSystemDrawer=function(){
+ starDrawerOpen=!starDrawerOpen;
+ const drawer=document.getElementById('starSystemDrawer');
+ if(drawer)drawer.classList.toggle('closed',!starDrawerOpen);
+ const btn=document.getElementById('starDrawerToggle');
+ if(btn){btn.textContent=starDrawerOpen?'‹':'›';btn.title=starDrawerOpen?'Close star system tools':'Open star system tools'}
+};
+window.ensureStarfieldPanels=function(){
+ const workspace=document.getElementById('workspace');
+ if(!workspace||document.getElementById('starSystemDrawer'))return;
+ const drawer=document.createElement('aside');
+ drawer.id='starSystemDrawer';
+ drawer.className='star-drawer closed';
+ drawer.innerHTML=`<button id="starDrawerToggle" class="star-drawer-toggle" onclick="toggleStarSystemDrawer()" title="Open star system tools">›</button>
+ <div class="star-drawer-inner">
+  <div class="star-ui-title">STAR SYSTEM</div>
+  <div class="star-ui-desc">Your universe is made from modular assets. Place Souls, Artifacts, Hearths and Stars anywhere, then tether any two things together.</div>
+  <div class="star-add-grid">
+   <button class="star-ui-btn" onclick="starRuntime&&starRuntime.add('soul')">+ Soul</button>
+   <button class="star-ui-btn" onclick="starRuntime&&starRuntime.add('artifact')">+ Artifact</button>
+   <button class="star-ui-btn" onclick="starRuntime&&starRuntime.add('hearth')">+ Hearth</button>
+   <button class="star-ui-btn" onclick="starRuntime&&starRuntime.add('star')">+ Star</button>
+  </div>
+  <div class="star-asset-list" id="starAssetList"></div>
+ </div>`;
+ workspace.appendChild(drawer);
+ const inspector=document.createElement('aside');
+ inspector.id='starAssetInspector';
+ inspector.className='star-inspector hidden';
+ workspace.appendChild(inspector);
+ updateStarfieldPanels();
+};
+window.updateStarfieldPanels=function(rebuildInspector=true){
+ if(!starRuntime)return;
+ const list=document.getElementById('starAssetList');
+ const selected=starRuntime.getSelected();
+ if(list)list.innerHTML=starRuntime.objects.map(o=>`<div class="star-asset-item ${selected===o.id?'selected':''}" onclick="starRuntime.select('${o.id}')"><i class="star-asset-dot"></i><span>${esc(o.name)}</span><small>${o.type}</small></div>`).join('');
+ const inspector=document.getElementById('starAssetInspector');
+ if(!inspector)return;
+ if(!selected){inspector.classList.add('hidden');inspector.innerHTML='';return}
+ const o=starRuntime.objects.find(x=>x.id===selected);
+ if(!o){inspector.classList.add('hidden');return}
+ inspector.classList.remove('hidden');
+ const names=starRuntime.tetherNames();
+ inspector.innerHTML=`<div class="star-ui-title">SELECTED ASSET</div>
+ <label class="star-ui-status" style="display:block;margin-bottom:5px">NAME</label>
+ <input class="star-ui-input" value="${esc(o.name)}" oninput="starRuntime.rename(this.value)">
+ <div class="star-ui-status" style="margin-top:8px">TYPE · ${esc(o.type)}</div>
+ <div style="height:1px;background:var(--line);margin:10px 0"></div>
+ <div class="star-ui-title" style="margin-bottom:6px">TETHERS</div>
+ <div class="star-ui-status">${names.length?names.map(esc).join(', '):'None'}</div>
+ <div class="star-inspector-actions">
+  <button class="star-ui-btn ${starRuntime.isTethering()?'active':''}" onclick="starRuntime.tether()">${starRuntime.isTethering()?'Click another asset…':'Tether to…'}</button>
+  <button class="star-ui-btn" onclick="starRuntime.remove()">Delete</button>
+ </div>`;
+};
+
 render();
 setTimeout(()=>{if(state.splash){state.splash=false;render()}},2400);
 </script>
