@@ -70,7 +70,8 @@ function railHTML(){
  const groups=[['Biography','Worlds','Stories','Artwork','Community'],['Devlog','Lore / Wiki','Gallery']];
  return `<div class="rail-title"><span>SECTIONS</span><button class="iconbtn rail-toggle" onclick="toggleRail()">${state.rail?'‹':'›'}</button></div>`+
  groups.map((g,i)=>g.map(n=>`<div class="navitem ${state.active===n?'active':''}" onclick="openSection('${esc(n)}')"><i class="dot"></i><span>${n}</span></div>`).join('')+(i===0?'<div class="railsep"></div>':'')).join('')+
- `<div class="rail-bottom"><button class="newnote" onclick="openNote()"><b>+</b><span>New note</span></button>
+ `<div class="navitem" onclick="window.location.href='constellation.html'" title="Constellation / 3D Space"><i class="dot"></i><span>Constellation / 3D Space</span></div>
+ <div class="rail-bottom"><button class="newnote" onclick="openNote()"><b>+</b><span>New note</span></button>
  <div class="profile" onclick="openSettings()"><div class="avatar">SH</div><div class="profile-info"><strong>My profile</strong><small>settings</small></div></div></div>`;
 }
 function render(){
