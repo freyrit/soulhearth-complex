@@ -52,7 +52,7 @@ button{color:inherit}.app{height:100%;display:flex;flex-direction:column;backgro
 .bridged{position:absolute;left:20px;bottom:58px;width:230px;max-height:340px;background:rgba(18,20,31,.97);border:1px solid #5d5294;border-radius:8px;box-shadow:0 12px 30px rgba(6,7,12,.6);padding:8px;z-index:16}.member{display:flex;align-items:center;gap:9px;padding:7px;border-radius:6px;cursor:pointer}.member:hover{background:#1f2130}.member .avatar{width:26px;height:26px}.member strong{display:block;font-size:10px;font-weight:500}.member small{display:block;font-size:9px;color:var(--muted);margin-top:3px}
 .notes{position:absolute;right:20px;top:20px;width:280px;max-height:calc(100% - 108px);overflow:auto;background:rgba(18,20,31,.96);border:1px solid var(--line2);border-radius:8px;padding:14px;display:flex;flex-direction:column;gap:10px;z-index:17}.note-row{border:1px solid var(--line);border-radius:7px;padding:9px;background:#161826}.note-row strong{display:block;font-size:10px;margin-bottom:4px}.note-row p{margin:0;color:var(--muted);font-size:9.5px;line-height:1.5}.note-row small{display:block;margin-top:6px;color:var(--dim);font-size:8px}
 .splash{position:absolute;inset:0;z-index:100;background:radial-gradient(circle at 50% 46%,rgba(145,132,217,.16),transparent 60%),#0d0e1a;display:grid;place-items:center;animation:splash 2.4s cubic-bezier(.4,0,.2,1) forwards;cursor:pointer}.splash-inner{text-align:center}.logo{width:210px;height:210px;border:1px dashed #5d5294;border-radius:50%;display:grid;place-items:center;font:500 10px ui-monospace,monospace;letter-spacing:.18em;color:var(--muted);box-shadow:0 0 60px rgba(145,132,217,.16)}.splash-line{width:180px;height:1px;background:linear-gradient(90deg,transparent,rgba(181,171,252,.6),transparent);margin:20px auto}.splash small{font:400 9.5px ui-monospace,monospace;letter-spacing:.16em;color:var(--dim)}@keyframes splash{0%{opacity:1;transform:scale(1)}60%{opacity:1;transform:scale(1.02)}100%{opacity:0;transform:scale(1.07);visibility:hidden}}
-.toast{position:absolute;right:20px;bottom:70px;z-index:90;padding:9px 12px;border:1px solid var(--line2);border-radius:7px;background:#161826;color:var(--muted);font-size:10px;box-shadow:0 8px 24px rgba(0,0,0,.4)}
+.toast{position:absolute;right:20px;bottom:70px;z-index:90;padding:9px 12px;border:1px solid var(--line2);border-radius:7px;background:#161826;color:var(--muted);font-size:10px;box-shadow:0 8px 24px rgba(0,0,0,.4)}.empty-hint{animation:emptyHintFade 5s ease forwards}@keyframes emptyHintFade{0%,55%{opacity:1}100%{opacity:0;visibility:hidden}}
 @media(max-width:760px){.brand{min-width:auto;font-size:13px}.search{max-width:none}.auth{min-width:auto}.rail{width:48px;padding:14px 0;align-items:center}.rail:not(.closed){width:48px}.rail .rail-title span,.rail .navitem span,.rail .profile-info{display:none}.rail .rail-title{justify-content:center}.rail .navitem{width:30px;padding:0;justify-content:center}.rail .newnote{width:30px;font-size:0}.rail .newnote b{font-size:15px}.fullgrid,.listgrid{grid-template-columns:1fr}.window{transform:scale(.88);transform-origin:top left}.notes{right:8px;top:8px;width:min(280px,calc(100% - 16px))}}
 </style>
 </head>
@@ -111,13 +111,9 @@ function render(){
 }
 function workspaceHTML(){
  let html=`<div class="constellation" style="transform:scale(${state.zoom})">
- <div class="link" style="left:290px;top:190px;width:210px;transform:rotate(-13deg)"></div>
- <div class="link" style="left:470px;top:150px;width:250px;transform:rotate(22deg)"></div>
- <div class="link" style="left:250px;top:410px;width:260px;transform:rotate(-18deg)"></div>
- <div class="link" style="left:560px;top:360px;width:230px;transform:rotate(30deg)"></div>
  ${Object.entries(state.windows).map(([name,w])=>windowHTML(name,w)).join('')}
  </div>`;
- if(!Object.keys(state.windows).length) html+=`<div style="position:absolute;inset:0;display:grid;place-items:center;color:var(--dim);font-size:11px;pointer-events:none">Open a section from the rail to begin exploring.</div>`;
+ if(!Object.keys(state.windows).length) html+=`<div class="empty-hint" style="position:absolute;inset:0;display:grid;place-items:center;color:var(--dim);font-size:11px;pointer-events:none">Open a section from the rail to begin exploring.</div>`;
  html+=`<div class="map-actions"><button class="pill active">My constellation</button><button class="pill ${state.bridged?'active':''}" onclick="toggleBridged()">Bridged</button><button class="pill ${state.list?'active':''}" onclick="toggleList()">List view</button></div>
  <div class="map-tools"><button class="pill" onclick="replaySplash()" title="Replay entry">▶</button><div class="zoom"><button onclick="changeZoom(.1)">+</button><button onclick="changeZoom(-.1)">−</button></div></div>`;
  if(state.bridged) html+=bridgedHTML();
@@ -217,9 +213,9 @@ function initStarfield(){
   scene.fog=new THREE.FogExp2(0x050713,.022);
   const camera=new THREE.PerspectiveCamera(50,1,.1,200);
   const root=new THREE.Group(); scene.add(root);
+  const grid=new THREE.GridHelper(28,28,0x4d5686,0x232842); grid.material.transparent=true; grid.material.opacity=.34; root.add(grid);
   scene.add(new THREE.HemisphereLight(0x9fb4ff,0x090713,1.2));
   const sun=new THREE.DirectionalLight(0xd6dcff,2.0); sun.position.set(-5,8,6); scene.add(sun);
-  const grid=new THREE.GridHelper(28,28,0x4d5686,0x232842); grid.material.transparent=true; grid.material.opacity=.34; root.add(grid);
   const bgGeo=new THREE.BufferGeometry(), bg=[], bgCol=[];
   for(let i=0;i<1100;i++){let r=35+Math.random()*55,t=Math.random()*Math.PI*2,u=Math.acos(Math.random()*2-1);bg.push(r*Math.sin(u)*Math.cos(t),r*Math.cos(u),r*Math.sin(u)*Math.sin(t));let c=.45+Math.random()*.55;bgCol.push(c,c,c+.12)}
   bgGeo.setAttribute('position',new THREE.Float32BufferAttribute(bg,3));bgGeo.setAttribute('color',new THREE.Float32BufferAttribute(bgCol,3));
