@@ -62,7 +62,8 @@ kbd{border:1px solid #454a65;background:#1a1d2d;border-radius:4px;padding:1px 5p
       Left-click + drag object = move it<br>
       Wheel = zoom<br>
       <kbd>Shift</kbd> + drag = pan<br>
-      Click an object = select
+      Click an object = select<br>
+      Tether to... → click another object = connect
     </div>
   </div>
 </aside>
@@ -319,7 +320,12 @@ function hitObject(clientX,clientY){
 canvas.addEventListener("pointerdown",function(e){
   var hit=hitObject(e.clientX,e.clientY);
 
-  if(e.button===0 && hit){
+  // While tether mode is active, let the click handler connect
+  // the selected object to the clicked target instead of starting
+  // an object drag or resetting tether mode.
+  if(e.button===0 && tetherMode && selected && hit && hit.id!==selected){
+    drag={active:false,moved:false,x:e.clientX,y:e.clientY};
+  }else if(e.button===0 && hit){
     objectDrag={active:true,id:hit.id,x:e.clientX,y:e.clientY};
     selected=hit.id;
     tetherMode=false;
@@ -400,8 +406,17 @@ canvas.addEventListener("click",function(e){
 
   if(tetherMode&&selected&&best&&best!==selected){
     var exists=links.some(function(p){return(p[0]===selected&&p[1]===best)||(p[1]===selected&&p[0]===best)});
-    if(!exists){links.push([selected,best]);save();toast("Tether created")}
-    tetherMode=false;tetherText();return;
+    if(!exists){
+      links.push([selected,best]);
+      save();
+      toast("Tether created");
+    }else{
+      toast("Already tethered");
+    }
+    tetherMode=false;
+    tetherText();
+    list();
+    return;
   }
   select(best);
 });
