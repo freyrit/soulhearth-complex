@@ -7,6 +7,7 @@
 <link rel="icon" type="image/png" href="/6e299620-ecc1-4e96-855a-4618d8f3712c.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<script src="https://unpkg.com/three@0.160.1/build/three.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#0f1120;--panel:#1b1d2b;--panel2:#161826;--bar:#232532;--line:#292b31;--line2:#3f424d;--muted:#9397ab;--dim:#5f6377;--text:#e9e9ed;--accent:#b5abfc;--accent2:#9184d9}
@@ -28,23 +29,9 @@ button{color:inherit}.app{height:100%;display:flex;flex-direction:column;backgro
 .notes{position:absolute;right:20px;top:20px;width:280px;max-height:calc(100% - 108px);overflow:auto;background:rgba(18,20,31,.96);border:1px solid var(--line2);border-radius:8px;padding:14px;display:flex;flex-direction:column;gap:10px;z-index:17}.note-row{border:1px solid var(--line);border-radius:7px;padding:9px;background:#161826}.note-row strong{display:block;font-size:10px;margin-bottom:4px}.note-row p{margin:0;color:var(--muted);font-size:9.5px;line-height:1.5}.note-row small{display:block;margin-top:6px;color:var(--dim);font-size:8px}
 .splash{position:absolute;inset:0;z-index:100;background:radial-gradient(circle at 50% 46%,rgba(145,132,217,.16),transparent 60%),#0d0e1a;display:grid;place-items:center;animation:splash 2.4s cubic-bezier(.4,0,.2,1) forwards;cursor:pointer}.splash-inner{text-align:center}.logo{width:210px;height:210px;border:1px dashed #5d5294;border-radius:50%;display:grid;place-items:center;font:500 10px ui-monospace,monospace;letter-spacing:.18em;color:var(--muted);box-shadow:0 0 60px rgba(145,132,217,.16)}.splash-line{width:180px;height:1px;background:linear-gradient(90deg,transparent,rgba(181,171,252,.6),transparent);margin:20px auto}.splash small{font:400 9.5px ui-monospace,monospace;letter-spacing:.16em;color:var(--dim)}@keyframes splash{0%{opacity:1;transform:scale(1)}60%{opacity:1;transform:scale(1.02)}100%{opacity:0;transform:scale(1.07);visibility:hidden}}
 .toast{position:absolute;right:20px;bottom:70px;z-index:90;padding:9px 12px;border:1px solid var(--line2);border-radius:7px;background:#161826;color:var(--muted);font-size:10px;box-shadow:0 8px 24px rgba(0,0,0,.4)}
-
-/* Integrated Soulhearth star-system layer */
-.star3d-wrap{position:absolute;inset:0;z-index:1;background:#03050d}
-.star3d-canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
-.star3d-ui{position:absolute;left:16px;top:16px;bottom:58px;width:255px;background:rgba(17,20,38,.92);border:1px solid #303550;border-radius:9px;padding:12px;z-index:5;backdrop-filter:blur(10px);box-shadow:0 10px 35px #0007;overflow:auto}
-.star3d-right{position:absolute;right:16px;top:16px;bottom:58px;width:270px;background:rgba(17,20,38,.92);border:1px solid #303550;border-radius:9px;padding:12px;z-index:5;backdrop-filter:blur(10px);box-shadow:0 10px 35px #0007;overflow:auto}
-.star3d-title{font:500 10px ui-monospace,monospace;letter-spacing:.14em;color:#bcbfe0;margin-bottom:9px}
-.star3d-sub{color:#9297b0;font-size:10px;line-height:1.5}
-.star3d-row{display:flex;gap:6px;margin-bottom:7px}.star3d-row>*{flex:1}
-.star3d-btn{height:29px;border:1px solid #3b405d;border-radius:7px;background:#171a2d;color:#eeeef8;cursor:pointer;font-size:10px}.star3d-btn:hover{background:#232743;border-color:#8075bd}.star3d-btn.primary{background:#292447;border-color:#7569b2}
-.star3d-list{border-top:1px solid #292d46;border-bottom:1px solid #292d46;padding:6px 0;margin:9px 0;max-height:calc(100% - 215px);overflow:auto}
-.star3d-object{display:flex;align-items:center;gap:7px;padding:7px;border-radius:6px;cursor:pointer}.star3d-object:hover{background:#1b1f35}.star3d-object.selected{background:#292546;border:1px solid #4b426d}.star3d-dot{width:8px;height:8px;border-radius:50%;background:#b9adff;flex:none}.star3d-object-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:10px}.star3d-object-type{margin-left:auto;color:#9297b0;font-size:9px}
-.star3d-section{border-bottom:1px solid #292d46;padding-bottom:10px;margin-bottom:10px}.star3d-label{display:block;color:#9297b0;font-size:9px;margin:0 0 5px}.star3d-input{width:100%;height:30px;background:#0b0e1d;color:#eeeef8;border:1px solid #373c58;border-radius:6px;padding:6px 8px;font-size:10px;margin-bottom:7px}
-.star3d-help{position:absolute;left:50%;bottom:16px;transform:translateX(-50%);z-index:6;color:#a1a5bd;background:#0d1020bf;border:1px solid #292d46;border-radius:999px;padding:7px 12px;font-size:10px;pointer-events:none;white-space:nowrap}
-.star3d-mode{position:absolute;left:50%;top:16px;transform:translateX(-50%);z-index:6;padding:7px 11px;border:1px solid #4b426d;border-radius:999px;background:#15172aee;color:#b9adff;font-size:10px}
-@media(max-width:760px){.star3d-ui{width:205px;left:8px;top:8px;bottom:52px}.star3d-right{width:220px;right:8px;top:8px;bottom:52px}.star3d-help{font-size:9px;bottom:10px}.star3d-mode{top:8px}}
 @media(max-width:760px){.brand{min-width:auto;font-size:13px}.search{max-width:none}.auth{min-width:auto}.rail{width:48px;padding:14px 0;align-items:center}.rail:not(.closed){width:48px}.rail .rail-title span,.rail .navitem span,.rail .profile-info{display:none}.rail .rail-title{justify-content:center}.rail .navitem{width:30px;padding:0;justify-content:center}.rail .newnote{width:30px;font-size:0}.rail .newnote b{font-size:15px}.fullgrid,.listgrid{grid-template-columns:1fr}.window{transform:scale(.88);transform-origin:top left}.notes{right:8px;top:8px;width:min(280px,calc(100% - 16px))}}
+
+.starfield-canvas{position:absolute;inset:0;width:100%;height:100%;display:block;z-index:1}.starfield-ui{position:absolute;inset:0;z-index:5;pointer-events:none}.sf-panel{position:absolute;top:14px;bottom:58px;width:min(245px,22vw);background:rgba(18,20,31,.9);border:1px solid var(--line2);border-radius:8px;padding:12px;backdrop-filter:blur(8px);pointer-events:auto;box-shadow:0 10px 28px rgba(0,0,0,.35)}.sf-left{left:14px}.sf-right{right:14px;width:min(260px,23vw)}.sf-title{font:500 9px ui-monospace,monospace;letter-spacing:.14em;color:var(--muted);margin-bottom:9px}.sf-desc{font-size:9px;color:var(--muted);line-height:1.5;margin-bottom:10px}.sf-actions{display:grid;grid-template-columns:1fr 1fr;gap:6px}.sf-btn{height:28px;border:1px solid var(--line2);border-radius:7px;background:#161826;color:var(--text);font-size:9px;cursor:pointer}.sf-btn:hover,.sf-btn.active{border-color:var(--accent2);color:var(--accent);background:rgba(145,132,217,.12)}.sf-list{margin-top:9px;border-top:1px solid var(--line);max-height:calc(100% - 220px);overflow:auto}.sf-item{display:flex;align-items:center;gap:7px;padding:7px 5px;border-bottom:1px solid rgba(63,66,77,.55);cursor:pointer;font-size:9px}.sf-item:hover,.sf-item.sel{background:rgba(145,132,217,.12)}.sf-dot{width:8px;height:8px;border-radius:50%;background:var(--accent);flex:none}.sf-item small{margin-left:auto;color:var(--dim);font-size:8px}.sf-status{font-size:9px;color:var(--muted);line-height:1.5}.sf-input{width:100%;height:29px;border:1px solid var(--line2);border-radius:7px;background:#12141f;color:var(--text);padding:0 8px;font-size:9px;outline:0}.sf-input:focus{border-color:var(--accent2)}.sf-bottom{position:absolute;left:50%;bottom:18px;transform:translateX(-50%);z-index:6;display:flex;gap:7px;pointer-events:auto}.sf-chip{height:28px;padding:0 11px;border:1px solid var(--line2);border-radius:999px;background:rgba(22,24,38,.92);color:var(--muted);font-size:9px;cursor:pointer}.sf-chip:hover{border-color:var(--accent2);color:var(--text)}.sf-help{position:absolute;left:50%;bottom:57px;transform:translateX(-50%);color:var(--dim);font-size:9px;pointer-events:none;white-space:nowrap}.sf-hide{display:none!important}@media(max-width:900px){.sf-panel{width:210px}.sf-right{width:220px}}
 </style>
 </head>
 <body>
@@ -63,26 +50,7 @@ button{color:inherit}.app{height:100%;display:flex;flex-direction:column;backgro
 </div>
 
 <script>
-// Load Three.js with a fallback CDN so the starfield also works when one CDN is blocked.
-(function(){
-  const sources=[
-    'https://unpkg.com/three@0.160.1/build/three.min.js',
-    'https://cdnjs.cloudflare.com/ajax/libs/three.js/r160/three.min.js'
-  ];
-  let i=0;
-  function loadNext(){
-    if(i>=sources.length){
-      const msg=document.createElement('div');msg.style.cssText='position:absolute;inset:0;display:grid;place-items:center;color:#9297b0;font:12px Inter,system-ui,sans-serif;z-index:2';msg.textContent='3D starfield could not load. Check your internet connection or browser extensions.';
-      document.getElementById('workspace')?.appendChild(msg);return;
-    }
-    const sc=document.createElement('script');sc.src=sources[i++];sc.onload=()=>{window.dispatchEvent(new Event('three-ready'))};sc.onerror=loadNext;document.head.appendChild(sc);
-  }
-  loadNext();
-})();
-</script>
-<script>
 const sections={
- Overview:{kind:'overview',desc:'The shared star-system layer where Souls, Artifacts, Hearths and Tethers can exist together.'},
  Biography:{kind:'bio',desc:'A home for identity, biography and the people behind each constellation.'},
  Worlds:{kind:'worlds',desc:'Explore member-created worlds and follow links between them.'},
  Stories:{kind:'stories',desc:'Long-form stories, journals and narrative fragments.'},
@@ -96,7 +64,7 @@ const members=[
  ['Mira','worldbuilding · illustration'],['Rowan','stories · lore'],['Aster','music · worlds'],
  ['June','artwork · writing'],['Sol','design · community']
 ];
-let state={rail:true,active:'Overview',windows:{},bridged:false,notes:false,list:false,zoom:1,search:'',splash:true,modal:null,settingsTab:'Account'};
+let state={rail:true,active:'Overview',windows:{},bridged:false,notes:false,list:false,zoom:1,search:'',splash:false,modal:null,settingsTab:'Account'};
 let z=20, notes=JSON.parse(localStorage.getItem('soulhearth_notes')||'[]');
 
 function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));}
@@ -105,74 +73,28 @@ function railHTML(){
  const groups=[['Overview','Biography','Worlds','Stories','Artwork','Community'],['Devlog','Lore / Wiki','Gallery']];
  return `<div class="rail-title"><span>SECTIONS</span><button class="iconbtn rail-toggle" onclick="toggleRail()">${state.rail?'‹':'›'}</button></div>`+
  groups.map((g,i)=>g.map(n=>`<div class="navitem ${state.active===n?'active':''}" onclick="openSection('${esc(n)}')"><i class="dot"></i><span>${n}</span></div>`).join('')+(i===0?'<div class="railsep"></div>':'')).join('')+
- `<div class="rail-bottom"><button class="newnote" onclick="openNote()"><b>+</b><span>New note</span></button>
+ `<div class="navitem" onclick="window.location.href='constellation.html'" title="Constellation / 3D Space"><i class="dot"></i><span>Constellation / 3D Space</span></div>
+ <div class="rail-bottom"><button class="newnote" onclick="openNote()"><b>+</b><span>New note</span></button>
  <div class="profile" onclick="openSettings()"><div class="avatar">SH</div><div class="profile-info"><strong>My profile</strong><small>settings</small></div></div></div>`;
-}
-
-const STAR_KEY='soulhearth_star_system_v1';
-let starData=loadStarData();
-let starRuntime=null;
-function loadStarData(){
- try{const d=JSON.parse(localStorage.getItem(STAR_KEY)||'null');if(d&&Array.isArray(d.objects))return {objects:d.objects,links:Array.isArray(d.links)?d.links:[],selected:d.selected||null,tether:false,yaw:.7,pitch:.35,distance:13,target:{x:0,y:0,z:0}}}catch(e){}
- const a=[{id:starUid(),type:'star',name:'Sol',x:-2,y:.4,z:0},{id:starUid(),type:'star',name:'Alpha',x:2,y:1,z:-1},{id:starUid(),type:'hearth',name:'Hearth',x:0,y:-.4,z:1.5},{id:starUid(),type:'soul',name:'First Soul',x:.6,y:.5,z:-1.8},{id:starUid(),type:'artifact',name:'First Artifact',x:-1.2,y:-.2,z:-1}];
- return {objects:a,links:[[a[0].id,a[2].id],[a[2].id,a[3].id]],selected:null,tether:false,yaw:.7,pitch:.35,distance:13,target:{x:0,y:0,z:0}};
-}
-function starUid(){return Math.random().toString(36).slice(2,10)}
-function starSave(){localStorage.setItem(STAR_KEY,JSON.stringify({objects:starData.objects,links:starData.links,selected:starData.selected}))}
-function starFind(id){return starData.objects.find(o=>o.id===id)}
-function starSelect(id){starData.selected=id||null;starData.tether=false;starSave();render()}
-function starAdd(type){const n=starData.objects.filter(o=>o.type===type).length+1;const labels={soul:'Soul',artifact:'Artifact',hearth:'Hearth',star:'Star'};const o={id:starUid(),type,name:(labels[type]||'Object')+' '+n,x:Math.random()*6-3,y:Math.random()*3-1.5,z:Math.random()*6-3};starData.objects.push(o);starData.selected=o.id;starSave();render();toast('Added '+o.name+' to the starfield')}
-function starRename(v){const o=starFind(starData.selected);if(o){o.name=v||'Unnamed';starSave();const el=document.querySelector('.star3d-object.selected .star3d-object-name');if(el)el.textContent=o.name}}
-function starDelete(){if(!starData.selected)return;const o=starFind(starData.selected);starData.links=starData.links.filter(p=>!p.includes(starData.selected));starData.objects=starData.objects.filter(x=>x.id!==starData.selected);starData.selected=null;starSave();render();toast('Removed '+(o?o.name:'asset'))}
-function starTetherMode(){if(!starData.selected)return toast('Select an asset first');starData.tether=!starData.tether;toast(starData.tether?'Tether mode: click another asset':'Tether mode cancelled')}
-function starResetView(){if(starRuntime){starRuntime.yaw=.7;starRuntime.pitch=.35;starRuntime.distance=13;starRuntime.target.set(0,0,0);starRuntime.cameraUpdate()} }
-function initStarfield3D(){
- const canvas=document.getElementById('star3dCanvas'); if(!canvas)return; if(!window.THREE){canvas.dataset.waiting='1';return;}
- if(starRuntime&&starRuntime.cleanup)starRuntime.cleanup();
- const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:false});renderer.setPixelRatio(Math.min(devicePixelRatio||1,2));renderer.setClearColor(0x03050d);renderer.outputColorSpace=THREE.SRGBColorSpace;
- const scene=new THREE.Scene();scene.fog=new THREE.FogExp2(0x050713,.025);const camera=new THREE.PerspectiveCamera(50,1,.1,200);
- scene.add(new THREE.HemisphereLight(0x9fb4ff,0x090713,1.25));const sun=new THREE.DirectionalLight(0xd6dcff,2.1);sun.position.set(-5,8,6);scene.add(sun);
- const grid=new THREE.GridHelper(20,20,0x4d5686,0x232842);grid.material.transparent=true;grid.material.opacity=.38;scene.add(grid);
- const bgGeo=new THREE.BufferGeometry(),bg=[];for(let i=0;i<900;i++){const r=35+Math.random()*55,t=Math.random()*Math.PI*2,u=Math.acos(Math.random()*2-1);bg.push(r*Math.sin(u)*Math.cos(t),r*Math.cos(u),r*Math.sin(u)*Math.sin(t))}bgGeo.setAttribute('position',new THREE.Float32BufferAttribute(bg,3));scene.add(new THREE.Points(bgGeo,new THREE.PointsMaterial({size:.13,color:0xbfc4d8,sizeAttenuation:true})));
- const meshes={},lines={};let objectDrag={active:false,id:null,plane:null,offset:null},drag={active:false,moved:false,x:0,y:0};
- function resize(){const r=canvas.parentElement.getBoundingClientRect();renderer.setSize(r.width,r.height,false);camera.aspect=r.width/r.height;camera.updateProjectionMatrix()} resize();
- function make(o){let g=new THREE.Group(),body,r=.25;if(o.type==='star'){r=.3;body=new THREE.Mesh(new THREE.SphereGeometry(r,32,24),new THREE.MeshStandardMaterial({color:0xffcc68,emissive:0xff9d24,emissiveIntensity:2.1,roughness:.45}));g.add(new THREE.Mesh(new THREE.SphereGeometry(.58,24,16),new THREE.MeshBasicMaterial({color:0xffb64b,transparent:true,opacity:.09,depthWrite:false,blending:THREE.AdditiveBlending})),body,new THREE.PointLight(0xffba5c,2.5,6))}else if(o.type==='hearth'){r=.28;body=new THREE.Mesh(new THREE.SphereGeometry(r,32,24),new THREE.MeshStandardMaterial({color:0x7d6ce8,roughness:.55,metalness:.1,emissive:0x251a5d,emissiveIntensity:.7}));g.add(body,new THREE.Mesh(new THREE.TorusGeometry(.4,.025,8,48),new THREE.MeshBasicMaterial({color:0xb9adff,transparent:true,opacity:.7})));}else if(o.type==='soul'){r=.24;body=new THREE.Mesh(new THREE.SphereGeometry(r,28,20),new THREE.MeshStandardMaterial({color:0xb9adff,roughness:.35,metalness:.35,emissive:0x22114c,emissiveIntensity:.5}));g.add(body,new THREE.Mesh(new THREE.TorusGeometry(.32,.018,8,30),new THREE.MeshBasicMaterial({color:0xd9d0ff,transparent:true,opacity:.65})));}else{r=.23;body=new THREE.Mesh(new THREE.BoxGeometry(.38,.38,.38),new THREE.MeshStandardMaterial({color:0xc8b8ff,roughness:.4,metalness:.35,emissive:0x21134a,emissiveIntensity:.45}));g.add(body)}g.position.set(o.x,o.y,o.z);g.userData.id=o.id;g.userData.radius=r;g.traverse(x=>x.userData.id=o.id);scene.add(g);meshes[o.id]=g}
- let lastStarSignature='';function sync(){Object.keys(meshes).forEach(id=>{if(!starFind(id)){scene.remove(meshes[id]);delete meshes[id]}});starData.objects.forEach(o=>{if(!meshes[o.id])make(o);meshes[o.id].position.set(o.x,o.y,o.z)});const sig=JSON.stringify(starData.objects.map(o=>[o.id,o.x,o.y,o.z]))+JSON.stringify(starData.links);if(sig===lastStarSignature)return;lastStarSignature=sig;Object.keys(lines).forEach(id=>{scene.remove(lines[id]);lines[id].geometry?.dispose();lines[id].material?.dispose();delete lines[id]});starData.links.forEach((p,i)=>{const a=starFind(p[0]),b=starFind(p[1]);if(!a||!b)return;const geo=new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(a.x,a.y,a.z),new THREE.Vector3(b.x,b.y,b.z)]);lines[i]=new THREE.Line(geo,new THREE.LineBasicMaterial({color:0xb9adff,transparent:true,opacity:.83}));scene.add(lines[i])})}
- function hit(e){const r=canvas.getBoundingClientRect(),p=new THREE.Vector2(((e.clientX-r.left)/r.width)*2-1,-((e.clientY-r.top)/r.height)*2+1),rc=new THREE.Raycaster();rc.setFromCamera(p,camera);const h=rc.intersectObjects(Object.values(meshes),true);return h.length?starFind(h[0].object.userData.id):null}
- function cameraUpdate(){const cp=Math.cos(starRuntime.pitch);camera.position.set(starRuntime.target.x+starRuntime.distance*cp*Math.sin(starRuntime.yaw),starRuntime.target.y+starRuntime.distance*Math.sin(starRuntime.pitch),starRuntime.target.z+starRuntime.distance*cp*Math.cos(starRuntime.yaw));camera.lookAt(starRuntime.target)}
- canvas.onpointerdown=e=>{const o=hit(e);if(e.button===0&&starData.tether&&starData.selected&&o&&o.id!==starData.selected){const exists=starData.links.some(p=>(p[0]===starData.selected&&p[1]===o.id)||(p[1]===starData.selected&&p[0]===o.id));if(!exists)starData.links.push([starData.selected,o.id]);starData.tether=false;starSave();render();return}if(e.button===0&&o){starData.selected=o.id;starData.tether=false;starSave();const plane=new THREE.Plane().setFromNormalAndCoplanarPoint(camera.getWorldDirection(new THREE.Vector3()),meshes[o.id].position),point=new THREE.Vector3();const rr=new THREE.Raycaster();const cr=canvas.getBoundingClientRect();rr.setFromCamera(new THREE.Vector2(((e.clientX-cr.left)/cr.width)*2-1,-((e.clientY-cr.top)/cr.height)*2+1),camera);rr.ray.intersectPlane(plane,point);objectDrag={active:true,moved:false,id:o.id,plane,offset:meshes[o.id].position.clone().sub(point)}}else drag={active:true,moved:false,x:e.clientX,y:e.clientY};canvas.setPointerCapture(e.pointerId)};
- canvas.onpointermove=e=>{if(objectDrag.active){const r=canvas.getBoundingClientRect(),p=new THREE.Vector2(((e.clientX-r.left)/r.width)*2-1,-((e.clientY-r.top)/r.height)*2+1),rc=new THREE.Raycaster(),point=new THREE.Vector3();rc.setFromCamera(p,camera);if(rc.ray.intersectPlane(objectDrag.plane,point)){point.add(objectDrag.offset);const o=starFind(objectDrag.id);o.x=point.x;o.y=point.y;o.z=point.z;meshes[o.id].position.copy(point);objectDrag.moved=true;starSave()}return}if(!drag.active)return;const dx=e.clientX-drag.x,dy=e.clientY-drag.y;if(Math.abs(dx)+Math.abs(dy)>2)drag.moved=true;if(e.shiftKey){const q=starRuntime.distance*.002;starRuntime.target.x-=dx*q*Math.cos(starRuntime.yaw);starRuntime.target.z+=dx*q*Math.sin(starRuntime.yaw);starRuntime.target.y+=dy*q}else{starRuntime.yaw-=dx*.008;starRuntime.pitch=Math.max(-1.45,Math.min(1.45,starRuntime.pitch-dy*.008))}drag.x=e.clientX;drag.y=e.clientY};
- canvas.onpointerup=()=>{if(objectDrag.active){const wasMoved=objectDrag.moved;objectDrag.active=false;if(!wasMoved)render();else starSave();return}if(drag.active&&!drag.moved){drag.active=false;return}drag.active=false};canvas.onwheel=e=>{e.preventDefault();starRuntime.distance=Math.max(4,Math.min(35,starRuntime.distance*Math.exp(e.deltaY*.001)))};
- let running=true;
- starRuntime={cameraUpdate, get yaw(){return starRuntime._yaw},set yaw(v){starRuntime._yaw=v}, get pitch(){return starRuntime._pitch},set pitch(v){starRuntime._pitch=v}, get distance(){return starRuntime._distance},set distance(v){starRuntime._distance=v}, target:new THREE.Vector3(), cleanup(){running=false;window.removeEventListener('resize',resize);renderer.dispose()}, camera,scene};
- starRuntime._yaw=.7;starRuntime._pitch=.35;starRuntime._distance=13;starRuntime.target.set(0,0,0);
- sync();cameraUpdate();
- function loop(){if(!running)return;requestAnimationFrame(loop);cameraUpdate();sync();renderer.render(scene,camera)}
- loop();window.addEventListener('resize',resize);
 }
 function render(){
  document.getElementById('rail').className='rail '+(!state.rail?'closed':'');
  document.getElementById('rail').innerHTML=railHTML();
  document.getElementById('workspace').innerHTML=workspaceHTML();
  bindDrag();
- requestAnimationFrame(initStarfield3D);
+ if(state.active==='Overview') setTimeout(sfInit,0);
 }
 function workspaceHTML(){
- let html=`<div class="star3d-wrap"><canvas id="star3dCanvas" class="star3d-canvas"></canvas>
- <div class="star3d-mode">SOULHEARTH STARFIELD · GAME LAYER</div>
- <aside class="star3d-ui"><div class="star3d-title">STAR SYSTEM</div>
- <div class="star3d-sub">Your universe is made from modular assets. Place Souls, Artifacts and Hearths anywhere, then tether any two things together.</div>
- <div class="star3d-row" style="margin-top:10px"><button class="star3d-btn primary" onclick="starAdd('soul')">+ Soul</button><button class="star3d-btn" onclick="starAdd('artifact')">+ Artifact</button></div>
- <div class="star3d-row"><button class="star3d-btn" onclick="starAdd('hearth')">+ Hearth</button><button class="star3d-btn" onclick="starAdd('star')">+ Star</button></div>
- <div class="star3d-list">${starListHTML()}</div>
- <div class="star3d-section"><div class="star3d-title" style="margin-bottom:6px">CONTROLS</div><div class="star3d-sub">Drag empty space = orbit<br>Drag an object = move it<br>Wheel = zoom<br>Shift + drag = pan<br>Click = select</div></div>
- <div class="star3d-row"><button class="star3d-btn" onclick="starTetherMode()">Tether selected</button><button class="star3d-btn" onclick="starResetView()">Reset view</button></div>
- </aside>
- <aside class="star3d-right">${starInspectorHTML()}</aside>
- <div class="star3d-help">Drag empty space to look around · click an object to select it · all assets share this layer</div></div>`;
- // Existing Soulhearth pages float above the shared star system.
- html+=`<div class="constellation" style="transform:scale(${state.zoom})">${Object.entries(state.windows).map(([name,w])=>windowHTML(name,w)).join('')}</div>`;
- html+=`<div class="map-actions"><button class="pill active">My universe</button><button class="pill ${state.bridged?'active':''}" onclick="toggleBridged()">Neighbors</button><button class="pill ${state.list?'active':''}" onclick="toggleList()">List view</button></div>
+ if(state.active==='Overview') return starfieldHTML();
+ let html=`<div class="grid"></div><div class="stars"></div><div class="constellation" style="transform:scale(${state.zoom})">
+ <div class="link" style="left:290px;top:190px;width:210px;transform:rotate(-13deg)"></div>
+ <div class="link" style="left:470px;top:150px;width:250px;transform:rotate(22deg)"></div>
+ <div class="link" style="left:250px;top:410px;width:260px;transform:rotate(-18deg)"></div>
+ <div class="link" style="left:560px;top:360px;width:230px;transform:rotate(30deg)"></div>
+ ${Object.entries(state.windows).map(([name,w])=>windowHTML(name,w)).join('')}
+ </div>`;
+ if(!Object.keys(state.windows).length) html+=`<div style="position:absolute;inset:0;display:grid;place-items:center;color:var(--dim);font-size:11px;pointer-events:none">Open a section from the rail to begin exploring.</div>`;
+ html+=`<div class="map-actions"><button class="pill active">My constellation</button><button class="pill ${state.bridged?'active':''}" onclick="toggleBridged()">Bridged</button><button class="pill ${state.list?'active':''}" onclick="toggleList()">List view</button></div>
  <div class="map-tools"><button class="pill" onclick="replaySplash()" title="Replay entry">▶</button><div class="zoom"><button onclick="changeZoom(.1)">+</button><button onclick="changeZoom(-.1)">−</button></div></div>`;
  if(state.bridged) html+=bridgedHTML();
  if(state.notes) html+=notesHTML();
@@ -181,18 +103,25 @@ function workspaceHTML(){
  if(state.splash) html+=`<div class="splash" onclick="endSplash()"><div class="splash-inner"><div class="logo">LOGO VIDEO</div><div class="splash-line"></div><small>TRANSPARENT · MUTED · AUTOPLAY · CLICK TO SKIP</small></div></div>`;
  return html;
 }
-function starListHTML(){
- const d=starData.objects;
- if(!d.length)return '<div class="star3d-sub" style="padding:12px 4px;text-align:center">No assets yet.<br>Add something to your universe.</div>';
- return d.map(o=>`<div class="star3d-object ${o.id===starData.selected?'selected':''}" onclick="starSelect('${o.id}')"><span class="star3d-dot"></span><span class="star3d-object-name">${esc(o.name)}</span><span class="star3d-object-type">${esc(o.type)}</span></div>`).join('');
-}
-function starInspectorHTML(){
- const o=starFind(starData.selected);
- if(!o)return `<div class="star3d-title">SELECTED ASSET</div><div class="star3d-sub">Select a Soul, Artifact, Hearth or Star.</div><div class="star3d-section" style="margin-top:14px"><div class="star3d-title">WHY IT EXISTS</div><div class="star3d-sub">Everything here is part of the same shared starfield layer. Other Soulhearth pages can represent the same assets differently.</div></div>`;
- const linked=starData.links.filter(p=>p.includes(o.id)).map(p=>starFind(p[0]===o.id?p[1]:p[0])).filter(Boolean).map(x=>esc(x.name)).join(', ');
- return `<div class="star3d-title">SELECTED ASSET</div><div class="star3d-section"><label class="star3d-label">NAME</label><input class="star3d-input" value="${esc(o.name)}" oninput="starRename(this.value)"><div class="star3d-sub">TYPE · ${esc(o.type)}</div></div>
- <div class="star3d-section"><div class="star3d-title" style="margin-bottom:6px">TETHERS</div><div class="star3d-sub">${linked||'Not tethered yet.'}</div></div>
- <div class="star3d-row"><button class="star3d-btn primary" onclick="starTetherMode()">Tether to...</button><button class="star3d-btn" onclick="starDelete()">Delete</button></div>`;
+function starfieldHTML(){
+ return `<canvas id="starfieldCanvas" class="starfield-canvas"></canvas>
+ <div class="starfield-ui">
+   <div class="sf-panel sf-left">
+     <div class="sf-title">STAR SYSTEM</div>
+     <div class="sf-desc">Your universe is made from modular assets. Place Souls, Artifacts, Hearths and Stars anywhere, then tether any two things together.</div>
+     <div class="sf-actions">
+       <button class="sf-btn" onclick="sfAdd('soul')">+ Soul</button><button class="sf-btn" onclick="sfAdd('artifact')">+ Artifact</button>
+       <button class="sf-btn" onclick="sfAdd('hearth')">+ Hearth</button><button class="sf-btn" onclick="sfAdd('star')">+ Star</button>
+     </div>
+     <div class="sf-list">${sfObjects.map(o=>`<div class="sf-item ${sfSelected===o.id?'sel':''}" onclick="sfSelect('${o.id}')"><i class="sf-dot"></i><span>${esc(o.name)}</span><small>${o.type}</small></div>`).join('')||'<div class="sf-status" style="padding:12px 5px">No assets yet.</div>'}</div>
+   </div>
+   <div class="sf-panel sf-right">
+     <div class="sf-title">SELECTED ASSET</div>
+     ${sfSelected?`<input class="sf-input" value="${esc((sfFind(sfSelected)||{}).name||'')}" oninput="sfRename('${sfSelected}',this.value)"><div class="sf-status" style="margin-top:8px">TYPE · ${(sfFind(sfSelected)||{}).type||''}</div><div style="height:1px;background:var(--line);margin:10px 0"></div><div class="sf-title" style="margin-bottom:6px">TETHERS</div><div class="sf-status">${sfTetherNames(sfSelected)||'None'}</div><div class="sf-actions" style="margin-top:10px"><button class="sf-btn" onclick="sfTether()">Tether to...</button><button class="sf-btn" onclick="sfDelete()">Delete</button></div>`:'<div class="sf-status">Select a Soul, Artifact, Hearth or Star.</div>'}
+   </div>
+   <div class="sf-bottom"><button class="sf-chip ${sfMode==='my'?'active':''}" onclick="sfMode='my';sfRender()">My universe</button><button class="sf-chip ${sfMode==='neighbors'?'active':''}" onclick="sfMode='neighbors';sfRender()">Neighbors</button><button class="sf-chip" onclick="sfResetView()">Reset view</button></div>
+   <div class="sf-help">Drag empty space = orbit · Drag an asset = move it · Wheel = zoom · Click = select</div>
+ </div>`;
 }
 function windowHTML(name,w){
  const x=w.x,y=w.y,width=w.width,height=w.height,focus=state.active===name;
@@ -202,7 +131,6 @@ function windowHTML(name,w){
 }
 function smallContent(name){
  const k=sections[name].kind;
- if(k==='overview')return `<div class="star3d-sub">Shared star-system layer. Open this page to manage the universe; the map itself stays present behind every other section.</div>`;
  if(k==='bio')return `<div class="biohead"><div class="bigavatar"></div><div class="lines" style="flex:1"><div class="line hi" style="width:70%"></div><div class="line" style="width:44%"></div><div class="line" style="width:100%;margin-top:5px"></div><div class="line" style="width:92%"></div><div class="line" style="width:74%"></div></div></div><div class="tags"><span class="tag">interest</span><span class="tag">interest</span><span class="tag">interest</span></div>`;
  if(k==='worlds')return `<div style="display:grid;grid-template-columns:1fr 1fr;gap:9px">${[1,2,3,4].map(i=>`<div><div class="placeholder" style="height:${i<3?56:44}px">WORLD</div><div style="display:flex;gap:5px;align-items:center;margin-top:5px"><div class="mini" style="width:12px;height:12px"></div><div class="line" style="width:${46+i*8}%"></div></div></div>`).join('')}</div>`;
  if(k==='stories')return `<div class="lines"><div class="line hi" style="width:64%"></div>${[100,96,88,64].map(x=>`<div class="line" style="width:${x}%"></div>`).join('')}<hr style="width:100%;border:0;border-top:1px solid var(--line)"><div class="line hi" style="width:54%"></div><div class="line" style="width:94%"></div><div class="line" style="width:80%"></div></div>`;
@@ -214,7 +142,7 @@ function smallContent(name){
 }
 function fullView(name){
  const d=sections[name],k=d.kind;
- let body=`<div class="fullview"><div class="fullhead"><div class="title"><i style="background:var(--accent)"></i>${esc(name.toUpperCase())}</div><div class="win-actions"><button class="btn" onclick="closeExpanded()">Restore</button><button class="iconbtn" onclick="closeExpanded()">✕</button></div></div><div class="fullbody"><div style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px"><div class="sub">This section can describe and edit the asset; the starfield remains the shared visual layer.</div><button class="btn primary" onclick="starAdd('${k==='bio'?'soul':k==='art'||k==='gallery'?'artifact':k==='worlds'?'hearth':'artifact'}')">+ Add to starfield</button></div>`;
+ let body=`<div class="fullview"><div class="fullhead"><div class="title"><i style="background:var(--accent)"></i>${esc(name.toUpperCase())}</div><div class="win-actions"><button class="btn" onclick="closeExpanded()">Restore</button><button class="iconbtn" onclick="closeExpanded()">✕</button></div></div><div class="fullbody">`;
  if(k==='bio')body+=`<div class="section-title">Your biography</div><p class="sub">${d.desc}</p><div class="card" style="margin-top:18px"><div class="biohead"><div class="bigavatar"></div><div><div style="font-size:13px;font-weight:500">A Soulhearth member</div><div class="sub">Add your real profile details when the backend is connected.</div></div></div><div class="tags"><span class="tag">worldbuilding</span><span class="tag">stories</span><span class="tag">art</span></div></div>`;
  else if(k==='community')body+=`<div class="section-title">Community</div><p class="sub">${d.desc}</p><div class="card" style="margin-top:18px">${members.concat(members).map(m=>`<div class="community-item"><div class="mini"></div><div><strong style="font-size:10px">${m[0]}</strong><div class="sub">${m[1]} · latest update and conversation</div></div></div>`).join('')}</div>`;
  else if(k==='gallery'||k==='art')body+=`<div class="section-title">${name}</div><p class="sub">${d.desc}</p><div class="gallery-grid" style="margin-top:18px">${Array.from({length:12},(_,i)=>`<div class="placeholder media">${i<6?'IMAGE':''}</div>`).join('')}</div>`;
@@ -224,7 +152,7 @@ function fullView(name){
 let expanded=null;
 function openSection(name){
  state.active=name;
- if(name==='Overview'){render();return;}
+ if(name==='Overview'){state.bridged=false;state.list=false;render();return;}
  if(!state.windows[name]){let i=Object.keys(state.windows).length;let defaults=[[56,74,300,196],[432,56,300,208],[806,118,286,230],[150,330,330,222],[552,346,300,214],[906,396,224,150],[1014,216,210,140],[898,596,236,152]][i%8];state.windows[name]={x:defaults[0],y:defaults[1],width:defaults[2],height:defaults[3],z:++z};}
  else state.windows[name].z=++z;
  state.bridged=false;render();
@@ -270,8 +198,33 @@ function toast(msg){let t=document.createElement('div');t.className='toast';t.te
 function bridgedHTML(){return `<div class="bridged"><div style="display:flex;justify-content:space-between;align-items:center;padding:2px 4px 6px"><span style="font:500 9px ui-monospace,monospace;letter-spacing:.14em;color:var(--muted)">SHARED INTERESTS</span><button class="iconbtn" onclick="toggleBridged()">✕</button></div>${members.map(m=>`<div class="member" onclick="openMember('${esc(m[0])}')"><div class="avatar">${initials(m[0])}</div><div><strong>${esc(m[0])}</strong><small>${esc(m[1])}</small></div></div>`).join('')}<div style="padding:6px;color:var(--dim);font-size:9px">Up to 5 · click a user to open their profile</div></div>`}
 function openMember(name){state.bridged=false;state.active='Biography';state.windows={Biography:{x:56,y:74,width:330,height:220,z:++z}};render();toast('Opened '+name+' demo profile.')}
 function listHTML(){const q=state.search.toLowerCase();let arr=Object.keys(sections).filter(n=>!q||n.toLowerCase().includes(q)||sections[n].desc.toLowerCase().includes(q));return `<div class="listview"><div style="max-width:900px;margin:0 auto 18px"><div class="section-title">List view</div><p class="sub">The non-map fallback for navigating Soulhearth.</p></div><div class="listgrid">${arr.map(n=>`<div class="listcard" onclick="toggleList();openSection('${esc(n)}')"><h3>${esc(n)}</h3><p>${esc(sections[n].desc)}</p></div>`).join('')||'<div class="sub">No results.</div>'}</div></div>`}
+
+// Integrated Soulhearth starfield layer. All asset types share one persistent model.
+let sfObjects=[],sfLinks=[],sfSelected=null,sfMode='my',sfTetherMode=false;
+let sfScene=null,sfCamera=null,sfRenderer=null,sfMeshes={},sfLines={},sfDrag={kind:null,id:null,x:0,y:0},sfYaw=.7,sfPitch=.35,sfDistance=13,sfTarget=null,sfAnim=0;
+const SFKEY='soulhearth_starfield_v1';
+function sfLoad(){try{const d=JSON.parse(localStorage.getItem(SFKEY)||'null');if(d&&Array.isArray(d.objects)){sfObjects=d.objects;sfLinks=Array.isArray(d.links)?d.links:[];return}}catch(e){}sfObjects=[{id:sfUid(),type:'star',name:'Sol',x:-2,y:.5,z:0},{id:sfUid(),type:'star',name:'Alpha',x:2,y:1,z:-1},{id:sfUid(),type:'hearth',name:'Hearth',x:0,y:-.5,z:1.2},{id:sfUid(),type:'soul',name:'First Soul',x:-.2,y:.1,z:.2},{id:sfUid(),type:'artifact',name:'First Artifact',x:.9,y:-.1,z:-.8}];sfLinks=[[sfObjects[0].id,sfObjects[2].id],[sfObjects[2].id,sfObjects[3].id],[sfObjects[3].id,sfObjects[4].id]];sfSave()}
+function sfSave(){try{localStorage.setItem(SFKEY,JSON.stringify({objects:sfObjects,links:sfLinks}))}catch(e){}}
+function sfUid(){return Math.random().toString(36).slice(2,10)}
+function sfFind(id){return sfObjects.find(o=>o.id===id)}
+function sfTetherNames(id){return sfLinks.map(p=>p[0]===id?sfFind(p[1]):p[1]===id?sfFind(p[0]):null).filter(Boolean).map(o=>esc(o.name)).join(', ')}
+function sfAdd(type){const labels={soul:'Soul',artifact:'Artifact',hearth:'Hearth',star:'Star'};const o={id:sfUid(),type,name:labels[type]+' '+(sfObjects.filter(x=>x.type===type).length+1),x:Math.random()*6-3,y:Math.random()*3-1.5,z:Math.random()*6-3};sfObjects.push(o);sfSelected=o.id;sfSave();sfRender()}
+function sfRename(id,name){const o=sfFind(id);if(o){o.name=name||'Unnamed';sfSave();const m=sfMeshes[id];if(m)m.userData.name=o.name;sfRender(false)}}
+function sfSelect(id){sfSelected=id||null;sfTetherMode=false;sfRender(false)}
+function sfDelete(){if(!sfSelected)return;sfLinks=sfLinks.filter(p=>p[0]!==sfSelected&&p[1]!==sfSelected);sfObjects=sfObjects.filter(o=>o.id!==sfSelected);sfSelected=null;sfSave();sfRender()}
+function sfTether(){if(sfSelected){sfTetherMode=!sfTetherMode}}
+function sfResetView(){sfYaw=.7;sfPitch=.35;sfDistance=13;if(sfCamera)sfUpdateCamera()}
+function sfMakeMesh(o){let g=new THREE.Group(),body,r=.25;if(o.type==='star'){r=.3;body=new THREE.Mesh(new THREE.SphereGeometry(r,24,18),new THREE.MeshStandardMaterial({color:0xffcc68,emissive:0xff9d24,emissiveIntensity:2,roughness:.45}));g.add(new THREE.Mesh(new THREE.SphereGeometry(.58,20,14),new THREE.MeshBasicMaterial({color:0xffb64b,transparent:true,opacity:.09,depthWrite:false,blending:THREE.AdditiveBlending})));g.add(body);g.add(new THREE.PointLight(0xffba5c,2.5,6))}else if(o.type==='hearth'){r=.34;body=new THREE.Mesh(new THREE.IcosahedronGeometry(r,1),new THREE.MeshStandardMaterial({color:0xbba9ff,roughness:.35,metalness:.3,emissive:0x22114c,emissiveIntensity:.5}));g.add(body);g.add(new THREE.Mesh(new THREE.TorusGeometry(.48,.018,8,30),new THREE.MeshBasicMaterial({color:0xd9d0ff,transparent:true,opacity:.65})))}else if(o.type==='soul'){r=.27;body=new THREE.Mesh(new THREE.SphereGeometry(r,24,18),new THREE.MeshStandardMaterial({color:0xf1c5ff,roughness:.4,metalness:.15,emissive:0x35164c,emissiveIntensity:.55}));g.add(body)}else{r=.25;body=new THREE.Mesh(new THREE.BoxGeometry(.38,.38,.38),new THREE.MeshStandardMaterial({color:0x8fd5ff,roughness:.5,metalness:.5,emissive:0x102b4c,emissiveIntensity:.35}));g.add(body);g.rotation.set(.25,.4,.15)}g.position.set(o.x,o.y,o.z);g.userData.id=o.id;g.userData.radius=r;g.traverse(x=>{if(x.isMesh)x.userData.id=o.id});sfScene.add(g);sfMeshes[o.id]=g}
+function sfRebuild(){Object.values(sfMeshes).forEach(m=>sfScene.remove(m));sfMeshes={};Object.values(sfLines).forEach(l=>sfScene.remove(l));sfLines={};sfObjects.forEach(sfMakeMesh);sfLinks.forEach((p,i)=>{const a=sfFind(p[0]),b=sfFind(p[1]);if(!a||!b)return;const geo=new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(a.x,a.y,a.z),new THREE.Vector3(b.x,b.y,b.z)]);sfLines[i]=new THREE.Line(geo,new THREE.LineBasicMaterial({color:0xb9adff,transparent:true,opacity:.8}));sfScene.add(sfLines[i])})}
+function sfInit(){const c=document.getElementById('starfieldCanvas');if(!c||typeof THREE==='undefined')return;sfRenderer=new THREE.WebGLRenderer({canvas:c,antialias:true});sfRenderer.setPixelRatio(Math.min(devicePixelRatio||1,2));sfRenderer.outputColorSpace=THREE.SRGBColorSpace;sfRenderer.setClearColor(0x050713);sfScene=new THREE.Scene();sfScene.fog=new THREE.FogExp2(0x050713,.025);sfCamera=new THREE.PerspectiveCamera(50,1,.1,200);sfTarget=new THREE.Vector3();sfScene.add(new THREE.HemisphereLight(0x9fb4ff,0x090713,1.25));const sun=new THREE.DirectionalLight(0xd6dcff,2.1);sun.position.set(-5,8,6);sfScene.add(sun);const grid=new THREE.GridHelper(20,20,0x4d5686,0x232842);grid.material.transparent=true;grid.material.opacity=.38;sfScene.add(grid);const geo=new THREE.BufferGeometry(),pts=[];for(let i=0;i<900;i++){const r=35+Math.random()*55,t=Math.random()*Math.PI*2,u=Math.acos(Math.random()*2-1);pts.push(r*Math.sin(u)*Math.cos(t),r*Math.cos(u),r*Math.sin(u)*Math.sin(t))}geo.setAttribute('position',new THREE.Float32BufferAttribute(pts,3));sfScene.add(new THREE.Points(geo,new THREE.PointsMaterial({color:0xdedee8,size:.13,sizeAttenuation:true})));sfRebuild();sfResize();sfBind(c);if(sfAnim)cancelAnimationFrame(sfAnim);sfFrame()}
+function sfResize(){if(!sfRenderer||!sfCamera)return;const c=document.getElementById('starfieldCanvas');if(!c)return;const w=c.clientWidth||document.getElementById('workspace').clientWidth,h=c.clientHeight||document.getElementById('workspace').clientHeight;sfRenderer.setSize(w,h,false);sfCamera.aspect=w/Math.max(1,h);sfCamera.updateProjectionMatrix()}
+function sfUpdateCamera(){const cp=Math.cos(sfPitch);sfCamera.position.set(sfTarget.x+sfDistance*cp*Math.sin(sfYaw),sfTarget.y+sfDistance*Math.sin(sfPitch),sfTarget.z+sfDistance*cp*Math.cos(sfYaw));sfCamera.lookAt(sfTarget)}
+function sfHit(e){const c=document.getElementById('starfieldCanvas'),r=c.getBoundingClientRect(),p=new THREE.Vector2(((e.clientX-r.left)/r.width)*2-1,-((e.clientY-r.top)/r.height)*2+1);const ray=new THREE.Raycaster();ray.setFromCamera(p,sfCamera);const h=ray.intersectObjects(Object.values(sfMeshes),true);return h.length?sfFind(h[0].object.userData.id):null}
+function sfBind(c){c.onpointerdown=e=>{const o=sfHit(e);if(o&&sfTetherMode&&sfSelected&&o.id!==sfSelected){const exists=sfLinks.some(p=>(p[0]===sfSelected&&p[1]===o.id)||(p[1]===sfSelected&&p[0]===o.id));if(!exists)sfLinks.push([sfSelected,o.id]);sfTetherMode=false;sfSave();sfRebuild();return}if(o){sfSelected=o.id;sfDrag={kind:'object',id:o.id,x:e.clientX,y:e.clientY}}else sfDrag={kind:'camera',id:null,x:e.clientX,y:e.clientY};c.setPointerCapture(e.pointerId)};c.onpointermove=e=>{if(!sfDrag.kind)return;const dx=e.clientX-sfDrag.x,dy=e.clientY-sfDrag.y;if(sfDrag.kind==='camera'){sfYaw-=dx*.008;sfPitch=Math.max(-1.45,Math.min(1.45,sfPitch-dy*.008))}else{const o=sfFind(sfDrag.id);if(o){o.x+=dx*.012;o.y-=dy*.012;const m=sfMeshes[o.id];m.position.set(o.x,o.y,o.z);sfRebuild();}}sfDrag.x=e.clientX;sfDrag.y=e.clientY};c.onpointerup=()=>{if(sfDrag.kind==='object')sfSave();sfDrag={kind:null,id:null,x:0,y:0}};c.onwheel=e=>{e.preventDefault();sfDistance=Math.max(4,Math.min(35,sfDistance*Math.exp(e.deltaY*.001)))}};
+function sfFrame(){if(!document.getElementById('starfieldCanvas'))return;sfAnim=requestAnimationFrame(sfFrame);sfResize();sfUpdateCamera();if(sfSelected&&sfMeshes[sfSelected]){sfMeshes[sfSelected].scale.setScalar(1.2+Math.sin(Date.now()*.004)*.08)}sfRenderer.render(sfScene,sfCamera)}
+function sfRender(reinit=true){if(state.active!=='Overview'){render();return}if(reinit){render();}else{const left=document.querySelector('.sf-list');if(left)left.innerHTML=sfObjects.map(o=>`<div class="sf-item ${sfSelected===o.id?'sel':''}" onclick="sfSelect('${o.id}')"><i class="sf-dot"></i><span>${esc(o.name)}</span><small>${o.type}</small></div>`).join('')||'<div class="sf-status" style="padding:12px 5px">No assets yet.</div>';render()}}
+sfLoad();
 document.getElementById('searchInput').addEventListener('input',e=>{state.search=e.target.value;if(state.search.trim()){state.list=true}else state.list=false;render()});
-window.addEventListener('three-ready',()=>requestAnimationFrame(initStarfield3D));
 render();
 setTimeout(()=>{if(state.splash){state.splash=false;render()}},2400);
 </script>
