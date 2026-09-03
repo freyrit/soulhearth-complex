@@ -164,7 +164,7 @@ form.onsubmit = async (event) => {
     setStatus('Cloud AI');
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Unknown error';
-    const hint = 'I couldn\'t reach the cloud AI endpoint. For local development, run the Vercel dev server (or deploy to Vercel) so /api/chat is available.';
+    const hint = 'MiniSo could not get a cloud-AI response.';
     addMessage(`${hint}\n\n${message}`);
     setStatus('Connection error');
   } finally {
