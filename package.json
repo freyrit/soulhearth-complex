@@ -1,0 +1,19 @@
+{
+  "name": "soulhearth-lattice",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@babylonjs/core": "^8.32.0",
+    "@babylonjs/materials": "^8.32.0"
+  },
+  "devDependencies": {
+    "vite": "latest",
+    "typescript": "latest",
+    "@vercel/node": "latest"
+  }
+}
