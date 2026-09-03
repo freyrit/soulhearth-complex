@@ -1,17 +1,18 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 
-const MODEL = process.env.OPENAI_MODEL || 'gpt-5-mini';
-const BASE_URL = (process.env.OPENAI_BASE_URL || 'https://api.openai.com/v1').replace(/\/$/, '');
+// MiniSo uses OpenRouter only. There is intentionally no OpenAI fallback.
+const MODEL = process.env.OPENROUTER_MODEL || 'openrouter/free';
+const BASE_URL = (process.env.OPENROUTER_BASE_URL || 'https://openrouter.ai/api/v1').replace(/\/$/, '');
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed.' });
   }
 
-  const apiKey = process.env.OPENAI_API_KEY?.trim();
+  const apiKey = process.env.OPENROUTER_API_KEY?.trim();
   if (!apiKey || apiKey === 'your_key_here') {
     return res.status(500).json({
-      error: 'MiniSo cloud AI is not configured yet. Add OPENAI_API_KEY to the Vercel project Environment Variables, then redeploy.'
+      error: 'MiniSo is not configured for OpenRouter yet. Add OPENROUTER_API_KEY to the Vercel project Environment Variables, then redeploy.'
     });
   }
 
@@ -25,7 +26,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${apiKey}`
+        Authorization: `Bearer ${apiKey}`,
+        'HTTP-Referer': 'https://soulhearth-complex.vercel.app/',
+        'X-Title': 'SOULHEARTH MiniSo'
       },
       body: JSON.stringify({
         model: MODEL,
@@ -40,20 +43,20 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     if (!response.ok) {
       const upstreamMessage = data?.error?.message || data?.message || raw || `HTTP ${response.status}`;
       return res.status(response.status).json({
-        error: `Cloud AI provider returned HTTP ${response.status}: ${upstreamMessage}`
+        error: `OpenRouter returned HTTP ${response.status}: ${upstreamMessage}`
       });
     }
 
     const text = data?.choices?.[0]?.message?.content;
     if (typeof text !== 'string' || !text.trim()) {
-      return res.status(502).json({ error: 'Cloud AI provider returned no message text.' });
+      return res.status(502).json({ error: 'OpenRouter returned no message text.' });
     }
 
     return res.status(200).json({ text: text.trim() });
   } catch (error) {
     const detail = error instanceof Error ? error.message : 'Unexpected server error.';
     return res.status(500).json({
-      error: `MiniSo could not contact the cloud AI provider: ${detail}`
+      error: `MiniSo could not contact OpenRouter: ${detail}`
     });
   }
 }

@@ -1,31 +1,29 @@
-# MiniSo — Cloud AI setup
+# MiniSo — OpenRouter Cloud AI setup
 
-MiniSo in this project is **cloud-AI only**. Ollama and Qwen are not required.
+MiniSo in this project is **cloud-AI only** and uses **OpenRouter**. Ollama, Qwen, and an OpenAI API key are not required. The backend intentionally has **no OpenAI fallback**.
 
 ## Vercel (recommended)
 
 1. Push this project to GitHub.
-2. Import the repository into Vercel.
-3. In **Vercel → Project → Settings → Environment Variables**, add:
+2. In **Vercel → Project → Settings → Environment Variables**, remove the old `OPENAI_API_KEY` variable if you no longer need it.
+3. Add:
 
-   - `OPENAI_API_KEY` = your cloud provider API key
-   - `OPENAI_MODEL` = `gpt-5-mini` (or another chat-completions-compatible model you use)
+   - `OPENROUTER_API_KEY` = your OpenRouter key from https://openrouter.ai/workspaces/default/keys
+   - `OPENROUTER_MODEL` = `openrouter/free`
 
-   `OPENAI_BASE_URL` is optional and should only be set when using an OpenAI-compatible provider other than the default OpenAI endpoint.
+   `OPENROUTER_BASE_URL` is optional and normally should be left unset because the project already defaults to `https://openrouter.ai/api/v1`.
 
-4. Make sure the variables are enabled for the environment you are deploying (usually **Production**; also enable **Preview** if you want previews to use MiniSo).
+4. Enable the variables for **Production** (and Preview if desired).
 5. **Redeploy** after adding/changing the variables.
 
-The API key is used only by `api/chat.ts` on the server. It is not placed in the browser code.
+The API key is used only by `api/chat.ts` on the server. It is never placed in browser code or committed to GitHub.
 
-## Why localhost and the deployed site are different
+## Local development
 
-`npm run dev` starts Vite, while `/api/chat` is a Vercel serverless function. For local MiniSo testing, use a Vercel-compatible dev server such as `vercel dev`, or deploy to Vercel.
+`npm run dev` starts Vite. For local MiniSo testing with the Vercel `/api/chat` function, use a Vercel-compatible dev server such as `vercel dev`, with the OpenRouter environment variables available locally.
 
-## If MiniSo shows HTTP 500
+## If MiniSo shows an error
 
-The most common cause is that `OPENAI_API_KEY` has not been added to the Vercel project, or the deployment happened before the variable was added. Add/update the variable and **redeploy**.
-
-If the key is configured but the provider rejects the request, MiniSo will now show the provider's returned HTTP status/message instead of hiding it behind a generic 500 message.
+The MiniSo error now reports OpenRouter's HTTP status and message. Common causes are an invalid/missing `OPENROUTER_API_KEY`, an unavailable model, or an OpenRouter account/provider limit.
 
 Never commit a real API key to GitHub.
