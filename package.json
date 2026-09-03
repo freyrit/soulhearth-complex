@@ -15,5 +15,6 @@
     "vite": "latest",
     "typescript": "latest",
     "@vercel/node": "latest"
-  }
+  },
+  "type": "module"
 }
