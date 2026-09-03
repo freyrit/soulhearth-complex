@@ -4,6 +4,22 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script src="./support.js"></script>
+
+<style id="miniso-css">
+#lattice-companion-launcher{position:fixed;right:18px;bottom:18px;z-index:10000;height:42px;padding:0 15px;border:1px solid #5b5190;border-radius:999px;background:rgba(18,20,31,.96);color:#c9c1ff;font:500 12px Inter,system-ui,sans-serif;box-shadow:0 10px 30px rgba(0,0,0,.35);cursor:pointer;backdrop-filter:blur(14px)}
+#lattice-companion{position:fixed;right:18px;bottom:18px;width:360px;height:520px;z-index:10001;background:#090a10;border:1px solid #292b3a;border-radius:14px;box-shadow:0 28px 90px rgba(0,0,0,.58);display:none;overflow:hidden;color:#e9e9ed;font:14px Inter,system-ui,sans-serif}
+#lattice-companion.open{display:flex;flex-direction:column}
+#lattice-companion.maximized{right:0;bottom:0;width:100vw;height:100vh;border-radius:0}
+#lattice-companion .lc-head{height:80px;min-height:80px;display:flex;align-items:center;gap:10px;padding:0 16px;border-bottom:1px solid #292b3a;background:#101119}
+#lattice-companion .lc-brand{display:flex;flex-direction:column;gap:4px;min-width:0}.lc-title{font-size:23px;line-height:1;font-weight:700;background:linear-gradient(90deg,#9f7cf4,#d18dff,#8f9cff);-webkit-background-clip:text;background-clip:text;color:transparent}.lc-subtitle{font-size:10px;color:#6e7391}
+#lattice-companion .lc-head-actions{margin-left:auto;display:flex;gap:7px}.lc-window-btn{width:34px;height:34px;border:1px solid #292b3a;border-radius:9px;background:#11131d;color:#777c9a;cursor:pointer;font-size:16px}.lc-minus{font-size:21px}
+#lattice-companion .lc-messages{flex:1;min-height:0;overflow:auto;padding:20px 16px 18px;display:flex;flex-direction:column;gap:16px;background:#08090e}
+#lattice-companion .lc-msg{max-width:82%;padding:11px 16px;border:1px solid #2f2743;border-radius:17px 17px 17px 3px;background:#1b1029;color:#eeeaf9;font-size:15px;line-height:1.48;white-space:pre-wrap}.lc-msg::before{content:"MINISO";display:block;margin-bottom:6px;color:#a986f5;font-size:9px;font-weight:700;letter-spacing:.08em}.lc-msg.user{align-self:flex-end;margin-left:18%;background:#202032;border-color:#303048;border-radius:17px 17px 3px 17px}.lc-msg.user::before{display:none}
+#lattice-companion form{display:flex;gap:9px;padding:12px 10px 14px;border-top:1px solid #292b3a;background:#101119}#lattice-companion input{flex:1;min-width:0;height:50px;background:#08090e;border:1px solid #9b7ce7;border-radius:13px;color:#eeeef8;padding:0 15px;outline:none;font-size:15px}#lattice-companion form button{width:50px;height:50px;flex:none;border:0;border-radius:13px;background:#ad86f6;color:#08090e;cursor:pointer;font-size:23px}
+@media(max-width:700px){#lattice-companion{right:5px;bottom:5px;width:calc(100vw - 10px);height:min(522px,calc(100vh - 10px))}}
+
+#lattice-companion .lc-settings-panel{display:none;padding:10px 12px;border-bottom:1px solid #292b3a;background:#101119}.lc-settings-panel.visible{display:block}.lc-setting-row{display:flex;align-items:center;gap:8px;margin:6px 0}.lc-setting-row label{width:78px;color:#777c9a;font-size:10px;text-transform:uppercase;letter-spacing:.06em}.lc-setting-row input,.lc-setting-row select{flex:1;min-width:0;height:30px;background:#08090e;border:1px solid #303047;border-radius:7px;color:#e9e9f4;padding:0 8px;font-size:11px}.lc-setting-actions{display:flex;align-items:center;justify-content:space-between;margin-top:8px}.lc-setting-actions span{font-size:10px;color:#7f83a2}.lc-setting-actions span.busy{color:#b795ff}.lc-setting-actions button{border:1px solid #3a3554;background:#171424;color:#b9adf4;border-radius:7px;padding:5px 8px;font-size:10px;cursor:pointer}
+</style>
 </head>
 <body>
 <x-dc>
@@ -190,10 +206,12 @@ input,textarea,select{font-family:var(--font-body)}
                   <div class="sh3d-ui-title">STAR SYSTEM</div>
                   <div class="sh3d-ui-desc">Your universe is made from modular assets. Place Essences, Relics, Sanctums and Luminaries anywhere, then tether any two things together.</div>
                   <div class="sh3d-add-grid">
-                    <button class="sh3d-ui-btn" data-sh3d-add="soul">+ Essence</button>
-                    <button class="sh3d-ui-btn" data-sh3d-add="artifact">+ Relic</button>
-                    <button class="sh3d-ui-btn" data-sh3d-add="hearth">+ Sanctum</button>
-                    <button class="sh3d-ui-btn" data-sh3d-add="star">+ Luminary</button>
+                    <button class="sh3d-ui-btn" data-sh3d-add="soul">+ Soul</button>
+                    <button class="sh3d-ui-btn" data-sh3d-add="artifact">+ Artifact</button>
+                    <button class="sh3d-ui-btn" data-sh3d-add="hearth">+ Hearth</button>
+                    <button class="sh3d-ui-btn" data-sh3d-add="constellation">+ Constellation</button>
+                    <button class="sh3d-ui-btn" data-sh3d-add="orchestration">+ Orchestration</button>
+                    <button class="sh3d-ui-btn" data-sh3d-add="decoration">+ Decoration</button>
                   </div>
                   <div class="sh3d-asset-list" id="sh3d-asset-list"></div>
                 </div>
@@ -2575,5 +2593,7 @@ function seedDb() {
   return { v: 1, entities: E, joined: ["const-lrd"] };
 }
 </script>
+<script type="module" src="/src/main.ts"></script>
+<div id="lattice-companion" aria-label="MiniSo companion AI"><div class="lc-head"><div class="lc-brand"><div class="lc-title">MiniSo ✦</div><div class="lc-subtitle">time-traveler's sidekick</div></div><div class="lc-head-actions"><button class="lc-window-btn" id="lc-settings" title="MiniSo settings">⚙</button><button class="lc-window-btn" id="lc-max" title="Maximize">□</button><button class="lc-window-btn lc-minus" id="lc-close" title="Minimize">−</button></div></div><div class="lc-settings-panel" id="lc-settings-panel"><div class="lc-setting-row"><label>AI brain</label><div class="lc-cloud-only">Cloud AI</div></div><div class="lc-setting-actions"><span id="lc-status">Cloud AI</span><button type="button" id="lc-clear">Clear chat</button></div></div><div class="lc-messages" id="lc-messages"></div><form id="lc-form"><input id="lc-input" autocomplete="off" placeholder="Say something…"><button aria-label="Send">➤</button></form></div><button id="lattice-companion-launcher" aria-controls="lattice-companion">MiniSo ✦</button>
 </body>
 </html>
