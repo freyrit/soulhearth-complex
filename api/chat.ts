@@ -32,7 +32,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       },
       body: JSON.stringify({
         model: MODEL,
-        messages
+        messages,
+        max_tokens: 120,
+        temperature: 0.85
       })
     });
 
