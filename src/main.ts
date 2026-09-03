@@ -1,6 +1,7 @@
 // Bundle the original SOULHEARTH DC runtime into the Vite build so Vercel cannot
 // accidentally serve the raw {{...}} template before support.js executes.
 import '../support.js';
+import { inject } from '@vercel/analytics';
 
 const launcher = document.getElementById('lattice-companion-launcher') as HTMLButtonElement;
 const panel = document.getElementById('lattice-companion') as HTMLElement;
@@ -250,3 +251,6 @@ if (!tryBoot()) {
   observer.observe(document.documentElement, { childList: true, subtree: true });
   setTimeout(() => { if (tryBoot()) observer.disconnect(); }, 5000);
 }
+
+// Initialize Vercel Web Analytics
+inject();
