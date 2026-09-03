@@ -62,6 +62,23 @@ function renderSavedChat() {
   else chatHistory.forEach((m) => addMessage(m.content, m.role === 'user', false));
 }
 
+function showTypingIndicator() {
+  const existing = document.getElementById('lc-typing');
+  if (existing) return existing;
+  const bubble = document.createElement('div');
+  bubble.id = 'lc-typing';
+  bubble.className = 'lc-typing';
+  bubble.setAttribute('aria-label', 'MiniSo is typing');
+  bubble.innerHTML = '<span>typing</span><span class="lc-typing-dots" aria-hidden="true"><i></i><i></i><i></i></span>';
+  messages.appendChild(bubble);
+  messages.scrollTop = messages.scrollHeight;
+  return bubble;
+}
+
+function hideTypingIndicator() {
+  document.getElementById('lc-typing')?.remove();
+}
+
 function buildLatticeContext() {
   const s = latticeState();
   const entities = Array.isArray(s.entities) ? s.entities : [];
@@ -190,11 +207,14 @@ form.onsubmit = async (event) => {
   input.value = '';
   input.disabled = true;
   setStatus('Thinking…', true);
+  showTypingIndicator();
   try {
     const answer = await reply(text);
+    hideTypingIndicator();
     addMessage(answer);
     setStatus('Cloud AI');
   } catch (error) {
+    hideTypingIndicator();
     const message = error instanceof Error ? error.message : 'Unknown error';
     const hint = 'MiniSo could not get a cloud-AI response.';
     addMessage(`${hint}\n\n${message}`);
