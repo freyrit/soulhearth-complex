@@ -1,8 +1,6 @@
-import * as BABYLON from '@babylonjs/core';
-import { GridMaterial } from '@babylonjs/materials';
-
-// Keep the original LATTICE renderer intact; Vite supplies Babylon locally instead of a CDN global.
-(window as any).BABYLON = { ...BABYLON, GridMaterial };
+// Bundle the original SOULHEARTH DC runtime into the Vite build so Vercel cannot
+// accidentally serve the raw {{...}} template before support.js executes.
+import '../support.js';
 
 const launcher = document.getElementById('lattice-companion-launcher') as HTMLButtonElement;
 const panel = document.getElementById('lattice-companion') as HTMLElement;
@@ -182,7 +180,7 @@ form.onsubmit = async (event) => {
   async ask(q: string) { return reply(q); }
 };
 
-// Start the original LATTICE 3D initializer after Babylon and its canvas are available.
+// Start the original LATTICE 3D initializer after the original runtime and its canvas are available.
 function tryBoot() {
   const init = (window as any).initSoulhearthOverview3D;
   const canvas = document.getElementById('soulhearth-overview-3d');
